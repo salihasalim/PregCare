@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Baby Kicks</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar Styles */
+        nav {
+            background-color: #6c5ce7; /* Purple color */
+            padding: 10px 0;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .navbar-logo {
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .navbar-links {
+            list-style-type: none;
+            display:flex;
+            gap: 20px;
+        }
+
+        .navbar-links li {
+            display: inline-block;
+        }
+
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .navbar-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content Styles */
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #6c5ce7; /* Purple color */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .btn {
+            background-color: #6c5ce7; /* Purple button */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor:pointer;
+            width: 100%;
+            font-size: 18px;
+        }
+
+        .btn:hover {
+            background-color: #5a4ac7; /* Darker purple on hover */
+        }
+
+        .alert {
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="navbar-container">
+            <a href="/" class="navbar-logo">PregCare</a>
+            <ul class="navbar-links">
+                <li><a href="/baby-kick-tracking/">Track Baby Kicks</a></li>
+                <li><a href="/pregnancy-tips/">Pregnancy Tips</a></li>
+                <li><a href="/exercise-plans/">Exercise Plans</a></li>
+                <li><a href="/diet-plans/">Diet Plans</a></li>
+                <li><a href="/profile/">Profile</a></li>
+                <li><a href="/logout/">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Track Your Baby's Kicks</h2>
+        <p>Enter the number of kicks your baby has made today:</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+
+        {% if message %}
+        <div class="alert mt-3">
+            {{ message }}
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+
+</html>
+

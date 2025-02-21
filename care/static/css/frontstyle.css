@@ -1,0 +1,91 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Front Page Container */
+
+.front-page-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    /* background-image: url("{% static 'images/frontimage.jpeg' %}"); */
+    background-image: url('/static/images/download.jpeg');
+
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+/* Content inside the Front Page */
+.content {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 50px 30px;
+    border-radius: 10px;
+    max-width:700px;
+    margin-bottom: 30px;
+}
+
+.content h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+}
+
+.content h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.content p {
+    font-size: 1.2em;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+/* Register and Login Containers */
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.auth-box {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    width: 250px;
+    text-align: center;
+}
+
+.auth-box h3 {
+    font-size: 1.5em;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: #f57c00;
+    color: white;
+    padding: 15px 25px;
+    font-size: 1.1em;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #ff9800;
+}
+
+
+
+

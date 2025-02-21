@@ -1,0 +1,74 @@
+.navbar {
+    background-color: #6c5ce7; /* Purple color for navbar */
+    padding: 1rem;
+}
+
+.navbar .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white !important;
+}
+
+.navbar-nav .nav-link {
+    color: white !important;
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: #5a4ac7; /* Darker purple when hovering */
+    border-radius: 5px;
+}
+.navbar-toggler {
+    border-color: #fff;
+}
+
+.navbar-toggler-icon {
+    background-color: #fff;
+}
+
+/* Active link styling */
+.navbar-nav .nav-item.active .nav-link {
+    background-color: #5a4ac7; /* Highlight active link with darker purple */
+    color: white !important;
+}
+
+/* Adjusting the spacing of the navbar */
+.navbar-nav.ml-auto {
+    margin-left: auto;
+}
+
+body {
+    background-color: #f4f7fa; /* Light gray background */
+    font-family: Arial, sans-serif;
+    /* background-image: url(/static/images/frontpage.jpeg'); */
+}
+
+h2 {
+    color: #6c5ce7; /* Purple color for the title */
+}
+
+.card {
+    border-radius: 8px; /* Rounded corners for the cards */
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    color: #2d3436;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #636e72;
+}
+
+/* Styling for the badges */
+.badge {
+    font-size: 0.875rem;
+    font-weight: 500;
+}

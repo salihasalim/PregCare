@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    {%load static%}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - PregCare</title>
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/loginstyle.css' %}">
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-form-container">
+            <h1>PregCare - Login</h1>
+            <p>Welcome back! Please login to continue managing your pregnancy journey.</p>
+
+            <form method="POST" class="login-form">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">Username</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="error">
+                            {% for error in form.username.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.password.id_for_label }}">Password</label>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                    <div class="error">
+                        {% for error in form.password.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="cta-button">Login</button>
+        </form>
+
+        <p>Don't have an account? <a href="{% url 'signup' %}">Sign up here</a></p>
+    </div>
+</div>
+
+</body>
+</html>
+

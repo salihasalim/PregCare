@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Books - Pregnancy Care</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Base styles for the page */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9; /* Light background for the page */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #800080; /* Purple */
+            padding: 15px 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-brand, .nav-link {
+            color: white !important;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .navbar-nav .nav-link {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #4b0082; /* Darker purple on hover */
+            color: #ffd700; /* Gold color on hover */
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-bar input {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 2px solid #800080; /* Purple border */
+            font-size: 1.1rem;
+        }
+
+        .search-bar input:focus {
+            border-color: #ffd700; /* Gold border on focus */
+            outline: none;
+        }
+
+        /* Book Card Layout */
+        .card {
+            background-color: #fff; /* White background for the cards */
+            color: #333; /* Dark text for better contrast */
+            border: 1px solid #ddd; /* Light border for the cards */
+            border-radius: 15px;
+            overflow: hidden; /* To keep image and content neatly contained */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Soft shadow for a clean look */
+            margin-bottom: 40px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add shadow transition for smooth hover effect */
+            padding: 20px;
+        }
+
+        .card:hover {
+            transform: translateY(-8px); /* Subtle upward movement */
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); /* Larger shadow on hover */
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Ensures content is spaced out properly */
+            height: 100%;
+        }
+
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #800080; /* Purple for card title */
+        }
+
+        .card-text {
+            font-size: 1.1rem;
+            color: #666; /* Light grey text */
+            margin-bottom: 20px;
+            line-height: 1.5; /* Line height for better readability */
+        }
+
+        .card img {
+            border-radius: 15px;
+            max-height: 250px; /* Limit image size to keep consistent card height */
+            object-fit: cover; /* Ensure image is properly cropped */
+            width: 100%;
+            margin-bottom: 20px; /* Space between image and card content */
+        }
+
+        .btn-primary {
+            background-color: #ffd700; /* Gold */
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            align-self: flex-end; /* Align button to the bottom of the card */
+        }
+
+        .btn-primary:hover {
+            background-color: #f7c300; /* Lighter gold */
+            color: #222; /* Dark text on hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow on button hover */
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #800080; /* Purple footer */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Card Layout: Adjust grid for responsiveness */
+        .row {
+            margin-top: 50px;
+        }
+
+        .col-md-4 {
+            display: flex;
+            justify-content: center;
+        }
+
+        @media (max-width: 992px) {
+            .col-md-4 {
+                max-width: 45%; /* For medium screens */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .col-md-4 {
+                max-width: 100%; /* For small screens, show 1 card per row */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">PregCare</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active mx-3">
+                        <a class="nav-link" href="{%url 'home'%}">Home</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link" href="{%url 'aboutus'%}">About Us</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link" href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" class="form-control" id="searchInput" placeholder="Search for a book by title">
+    </div>
+
+    <!-- Book Cards -->
+    <div class="container">
+        <div class="row" id="bookContainer">
+            {% for book in books %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ book.cover_image.url }}" class="card-img-top" alt="{{ book.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text">{{ book.description }}</p>
+                            <a href="{{ book.pdf_file.url }}" class="btn btn-primary" download>Download PDF</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No books available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 Pregnancy Care. All Rights Reserved.</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            var searchTerm = this.value.toLowerCase();
+            var books = document.querySelectorAll('.card');
+            
+            books.forEach(function(book) {
+                var title = book.querySelector('.card-title').textContent.toLowerCase();
+                if (title.indexOf(searchTerm) === -1) {
+                    book.style.display = 'none';
+                } else {
+                    book.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

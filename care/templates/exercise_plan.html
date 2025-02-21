@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    {%load static%}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise Plans</title>
+    <link rel="stylesheet" href="{% static 'css/exerciseplan.css' %}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <img src="{% static 'images/logo.png' %}" alt="Pregcare Logo">
+        </div>
+        <a href="/">Home</a>
+        <a href="/exercise-plans/">Exercise Plans</a>
+        <a href="/profile/">Profile</a>
+    </div>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Exercise Plans for {{ user.userprofile.current_trimester }}</h1>
+            <p>Safe and effective exercises tailored for your trimester.</p>
+        </div>
+    </div>
+
+    <div class="exercise-videos">
+        <!-- Debugging message for current trimester -->
+        <!-- <p>Current Trimester: {{ user.userprofile.current_trimester }}</p> -->
+        
+        {% if videos %}
+            {% for video in videos %}
+                <div class="video">
+                    <h3>{{ video.title }}</h3>
+                    <p>{{ video.description }}</p>
+                    
+                    {% if video.video_url %}
+                        <a href="{{ video.video_url }}" target="_blank">Watch Video</a>
+                    {% elif video.video_file %}
+                        <video width="320" height="240" controls>
+                            <source src="{{ video.video_file.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    {% endif %}
+                    <p><strong>Trimester:</strong> {{ video.get_trimester_display }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No exercise videos available for this trimester.</p>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Pregnancy Care. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
+```
+

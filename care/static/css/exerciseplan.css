@@ -1,0 +1,175 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #4A90E2;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar .logo img {
+    height: 40px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    margin-left: 20px;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+/* Hero Section */
+.hero-section {
+    background-image: url('https://via.placeholder.com/1500x500');
+    background-size: cover;
+    background-position: center;
+    color: rgb(14, 12, 12);
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    margin: 0;
+}
+
+.hero-section p {
+    font-size: 1.5rem;
+    margin-top: 10px;
+}
+
+.cta-button {
+    padding: 12px 25px;
+    background-color: #4A90E2;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.cta-button:hover {
+    background-color: #357ABD;
+}
+
+/* Exercise Plan Section */
+.exercise-videos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px;
+}
+
+.video {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.video:hover {
+    transform: scale(1.05);
+}
+
+.video h3 {
+    font-size: 1.8rem;
+    color: #4A90E2;
+}
+
+.video p {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+.video a {
+    display: inline-block;
+    margin-top: 15px;
+    background-color: #4A90E2;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.video a:hover {
+    background-color: #357ABD;
+}
+
+/* Profile Page Styling */
+.profile-container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-container h1 {
+    font-size: 2.5rem;
+    color: #4A90E2;
+}
+
+.profile-container form {
+    display: grid;
+    gap: 15px;
+}
+
+.profile-container input, 
+.profile-container select, 
+.profile-container button {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.profile-container input[type="date"] {
+    padding-left: 10px;
+}
+
+.profile-container button {
+    background-color: #4A90E2;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-container button:hover {
+    background-color: #357ABD;
+}
+
+.profile-container label {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+/* Footer Styling */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    margin: 0;
+}

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Reminder</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts for stylish text -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS for colors, card, and animations -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f7f7f7;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #6f42c1;
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ddd !important;
+        }
+
+        /* Card Styles */
+        .card {
+            margin-top: 30px;
+            border-radius: 8px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Card Header */
+        .card-header {
+            background-color: #6f42c1;
+            color: white;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        /* Reminder Add Form Button */
+        .btn-purple {
+            background-color: #6f42c1;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .btn-purple:hover {
+            background-color: #5a2f99;
+            transition: 0.3s;
+        }
+
+        /* Reminder List Section */
+        .reminder-header {
+            background-color: #6f42c1;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .reminder-container {
+            padding: 30px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #6f42c1;
+        }
+
+        /* Style for Reminder Form */
+        .form-control {
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        /* Animation Effect for Cards */
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Center Content */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 30px;
+        }
+
+        .reminder-section-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            color: #6f42c1;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">PregCare</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container reminder-container">
+
+        <!-- Reminder Add Section -->
+        <div class="reminder-header text-center">
+            <h3>Add a New Reminder</h3>
+        </div>
+
+        <!-- Reminder Form -->
+        <form method="POST">
+            {% csrf_token %}
+            <div class="card shadow-lg">
+                <div class="card-body">
+
+                    <!-- Title Input -->
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+
+                    <!-- Description Input -->
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                    </div>
+
+                    <!-- Reminder Type (Dropdown) -->
+                    <div class="form-group">
+                        <label for="reminder_type">Reminder Type:</label>
+                        <select class="form-control" id="reminder_type" name="reminder_type" required>
+                            <option value="doctor">Doctor's Appointment</option>
+                            <option value="medication">Medication Schedule</option>
+                            <option value="exercise">Exercise Reminder</option>
+                        </select>
+                    </div>
+
+                    <!-- Reminder Date -->
+                    <div class="form-group">
+                        <label for="reminder_date">Reminder Date:</label>
+                        <input type="date" class="form-control" id="reminder_date" name="reminder_date" required>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-purple btn-block">Save Reminder</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Reminder List Section -->
+        <!-- <div class="reminder-header mt-5 text-center">
+            <h3>Your Reminders</h3>
+        </div> -->
+
+        <!-- Reminder Cards -->
+        <!-- {% for reminder in reminders %}
+        <div class="card shadow-lg" data-aos="fade-up" data-aos-duration="1000">
+            <div class="card-header">
+                <h5>Reminder for {{ reminder.reminder_date }}</h5>
+            </div>
+            <div class="card-body">
+                <h6>{{ reminder.title }}</h6>
+                <p>{{ reminder.description }}</p>
+                <p><strong>Type:</strong> {{ reminder.get_reminder_type_display }}</p>
+                <button class="btn btn-purple btn-sm">Mark as Completed</button>
+            </div>
+        </div>
+        {% empty %}
+        <p>No reminders available yet.</p>
+        {% endfor %} -->
+        
+
+    </div>
+
+    <!-- Bootstrap JS and JQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- AOS (Animate on Scroll) JS for animations -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+
+</body>
+
+</html>
+
+
+
+
+

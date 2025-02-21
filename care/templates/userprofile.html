@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    {%load static%}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ request.user.username}}'s Profile</title>
+    <link rel="stylesheet" href="{% static 'css/userprofile.css' %}">
+
+</head>
+
+<body>
+    
+
+    <header>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="/" class="logo">
+                    <img src="{% static 'images/logo.png' %}" alt="PregCare Logo" class="navbar-logo">
+                </a>
+                
+
+                <ul class="navbar-links">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                    <li><a href="">Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="profile-container">
+        <h1>{{ request.user }}'s Profile</h1>
+
+        <div class="profile-form">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.as_p }}
+                </div>
+
+                <button type="submit" class="btn-submit">Save Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Pregnancy Care. All Rights Reserved.</p>
+    </footer>
+
+</body>
+
+</html>

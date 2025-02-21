@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Books - Pregnancy Care</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Base styles for the page */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9; /* Light background for the page */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #800080; /* Purple */
+            padding: 5px;
+        }
+
+        .navbar-brand, .nav-link {
+            color: white !important;
+            font-size: 1.2rem;
+            font-weight:200;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: #4b0082; /* Darker purple on hover */
+            color: #ffd700; /* Gold color on hover */
+        }
+
+        /* Search bar */
+        .search-bar {
+        
+        margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 10px;
+            border-radius: 25px;
+            border: 2px solid #800080; /* Purple border */
+            font-size: 1rem;
+        }
+
+        .search-bar input:focus {
+            border-color: #ffd700; /* Gold border on focus */
+            outline: none;
+        }
+
+        /* Book Card Layout */
+        .card {
+            padding-top: 5px;
+            background-color: #222; /* Black background for cards */
+            color: white;
+            border: 2px solid #800080; /* Purple border for the cards */
+            border-radius: 10px;
+            margin-bottom: 30px;
+            margin-top:20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05); /* Slight zoom on hover */
+        }
+
+        .card-body {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .card-text {
+            font-size: .875rem;
+            color: #ccc; /* Light grey text */
+            margin-bottom: 15px;
+        }
+
+        .card img{
+            border-radius: 10px;
+            max-height: 300px;
+            object-fit: cover;
+        }
+
+        .btn-primary {
+            background-color: #ffd700; /* Gold */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #f7c300; /* Lighter gold */
+            color: #222; /* Dark text on hover */
+        }
+        
+        bookContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: space-between;
+            padding-top: 50px; 
+        }
+
+        .footer {
+            background-color: #800080; /* Purple footer */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">PregCare</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item active mx-3">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link" href="#">Logout</a>
+                    </li>
+                    <li class="container search-bar">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search for a book by title">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Bar
+    <div class="container search-bar">
+        <input type="text" class="form-control" id="searchInput" placeholder="Search for a book by title">
+    </div> -->
+
+    <!-- Book Cards -->
+    <div class="container">
+        <div class="row " id="bookContainer">
+            {% for book in books %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ book.cover_image.url }}" class="card-img-top" alt="{{ book.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text">{{ book.description }}</p>
+                            <a href="{{ book.pdf_file.url }}" class="btn btn-primary" download>Download PDF</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No books available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 Pregnancy Care. All Rights Reserved.</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+       
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            var searchTerm = this.value.toLowerCase();
+            var books = document.querySelectorAll('.card');
+            
+            books.forEach(function(book) {
+                var title = book.querySelector('.card-title').textContent.toLowerCase();
+                if (title.indexOf(searchTerm) === -1) {
+                    book.style.display = 'none';
+                   } else{     
+                    book.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+class DietPlan(models.Model):
+    trimester_choices = [
+        ('First', 'First Trimester'),
+        ('Second', 'Second Trimester'),
+        ('Third', 'Third Trimester'),
+    ]
+
+    trimester = models.CharField(max_length=20, choices=trimester_choices)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link the diet plan to a user
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    meal_plan = models.TextField()  # Detailed meal plan
+    recommendations = models.TextField()  # Additional recommendations (e.g., foods to avoid, supplements)
+    
+    def _str_(self):
+        return f"{self.trimester} - {self.title}"
+
+    class Meta:
+        ordering = ['trimester']

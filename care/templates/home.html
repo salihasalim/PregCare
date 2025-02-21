@@ -1,0 +1,191 @@
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pregnancy Care - Home</title>
+    <link rel="stylesheet" href="{% static 'css/homestyle.css' %}">
+</head>
+<style>
+    /* General Navbar Styles */
+.navbar {
+    background-color: #4B0082; /* Dark Purple */
+    padding: 15px 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.logo-text {
+    font-size: 30px;
+    color: #FFD700; /* Gold for logo */
+    text-transform: uppercase;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.navbar-links li {
+    margin: 0;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+    color: #FFD700; /* Gold on hover */
+}
+
+/* Menu Toggle for Small Screens */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 10px;
+        background-color: #4B0082;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .navbar-links.active {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+}
+
+</style>
+
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="logo">
+                <span class="logo-text">PregCare</span>
+            </a>
+            <ul class="navbar-links">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'exercise_plan' %}">Exercise Plans</a></li>
+                <li><a href="{% url 'explore_books' %}">Explore Books</a></li>
+                <li><a href="{% url 'pregnancytip' %}">Pregnancy Tips</a></li>
+                <li><a href="{%url 'logout'%}">Logout</a></li>
+            </ul>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        </div>
+    </nav>
+    
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Welcome to Pregnancy Care</h1>
+            <p>Your trusted companion for a healthy and informed pregnancy journey</p>
+        </div>
+    </div>
+
+    <!-- Display Baby Image based on Pregnancy Week -->
+    <div class="baby-size-image">
+        <h2>Baby's Growth Week: {{ pregnancy_week }}</h2>
+        <img src="{% static baby_image %}" alt="Your Baby's Size" class="baby-size-img" />
+    </div>
+
+    <div class="features">
+        <div class="feature-box">
+            <h3>Pregnancy Profile</h3>
+            <p>Want to update your profile information?</p>
+            <a href="{% url 'profile' %}" class="cta-button">Edit Profile</a>
+        </div>
+
+        <div class="feature-box">
+            <h3>Books for Pregnancy Care</h3>
+            <p>Expert advice on health, nutrition, and wellness for every stage of pregnancy.</p>
+            <a href="{% url 'explore_books' %}" class="cta-button">Explore Books</a>
+        </div>
+        <div class="feature-box">
+            <h3>Exercise Plans</h3>
+            <p>Safe and effective exercise videos customized to your trimester.</p>
+            <a href="{% url 'exercise_plan' %}" class="cta-button">View Plans</a>
+        </div>
+    </div>
+
+    <div class="features">
+        <div class="feature-box">
+            <h3>Baby Growth Tracker</h3>
+            <p>Track your baby's growth and developmental milestones every week.</p>
+            <a href="{% url 'baby_kick_tracking' %}" class="cta-button">Track Growth</a>
+        </div>
+        <div class="feature-box">
+            <h3>Pregnancy Tips</h3>
+            <p>Personalized Tips tailored to the baby's growth and milestones.</p>
+            <a href="{% url 'pregnancytip' %}" class="cta-button">Get Started</a>
+        </div>
+
+        <div class="feature-box">
+            <h3>Set Reminders</h3>
+            <p>Help users stay organized and maintain their health regimen</p>
+            <a href="{% url 'add_reminder' %}" class="cta-button">Add Reminder</a>
+        </div>
+        <div class="feature-box">
+            <h3>Diet Plans</h3>
+            <p>Help users stay organized and maintain their health regimen</p>
+            <a href="{% url 'diet_plans' %}" class="cta-button">diet-plan</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Pregnancy Care. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Toggle the menu on mobile
+        function toggleMenu() {
+            const navbarLinks = document.querySelector('.navbar-links');
+            navbarLinks.classList.toggle('active');
+        }
+    </script>
+
+</body>
+
+</html>

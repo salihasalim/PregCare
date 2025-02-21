@@ -1,0 +1,105 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('/static/images/login.jpeg'); /* Add your background image */
+    background-size: cover;
+    background-position: center;
+}
+.login-form-container {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 40px;
+    max-width: 450px;
+    width:100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* Header and Text Styling */
+.login-form-container h1 {
+    font-size: 2.5em;
+    color: #5C6BC0;
+    margin-bottom: 20px;
+}
+
+.login-form-container p {
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 40px;
+}
+
+/* Form Field Styling */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    border-color: #5C6BC0;
+}
+
+/* Error Messages Styling */
+.error p {
+    color: red;
+    font-size: 0.9em;
+}
+
+/* Submit Button Styling */
+.cta-button {
+    background-color: #5C6BC0;
+    color: white;
+    padding: 12px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.cta-button:hover {
+    background-color: #3f4e97;
+}
+
+/* Link Styling */
+.login-form-container p a {
+    color: #5C6BC0;
+    text-decoration: none;
+}
+
+.login-form-container p a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width:768px){
+    .login-form-container {
+        width: 80%;
+        padding: 25px;
+    }
+}
+

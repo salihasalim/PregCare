@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PregCare - A Complete Guide</title>
+    <link rel="stylesheet" href="{% static 'css/frontpage.css' %}">
+</head>
+
+<body>
+
+    <!-- Front Page Section with Background Image -->
+    <div class="front-page-container">
+        <div class="content">
+            <h1>PregCare</h1>
+            <h2>A Complete Guide for Your Pregnancy Journey</h2>
+            <p>
+                PregCare is an all-in-one mobile platform designed to assist expectant mothers in managing their pregnancy journey
+                with ease and confidence. From expert advice on health and nutrition to personalized exercise plans, we are here to guide
+                you through every stage of pregnancy with helpful resources and tools.
+            </p>
+        </div>
+
+        <!-- Register and Login Containers -->
+        <div class="auth-container">
+            <div class="auth-box">
+                <h3>Register</h3>
+                <a href="{% url 'signup' %}" class="cta-button">Create an Account</a>
+            </div>
+
+            <div class="auth-box">
+                <h3>Login</h3>
+                <a href="{% url 'signin' %}" class="cta-button">Login</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

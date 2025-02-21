@@ -1,0 +1,148 @@
+
+/* General Page Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;  /* Light background */
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #4B0082;  /* Deep purple */
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar .logo img {
+    height: 40px;
+    width: auto;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.navbar-links a:hover {
+    background-color: #000080;  /* Navy blue hover effect */
+}
+
+/* Profile Container */
+.profile-container {
+    width: 80%;
+    margin: 40px auto;
+    background-color: #fff;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    max-width: 800px;
+    border-left: 5px solid #4B0082;  /* Purple left border */
+}
+
+/* Profile Form */
+.profile-form {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+form input, form select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-top: 5px;
+}
+
+form input:focus, form select:focus {
+    outline: none;
+    border-color: #4B0082;  /* Purple border on focus */
+}
+
+/* Submit Button */
+.btn-submit {
+    background-color: #4B0082;  /* Deep purple */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+}
+
+.btn-submit:hover {
+    background-color: #000080;  /* Navy blue on hover */
+}
+
+/* Footer */
+footer {
+    background-color: #4B0082;  /* Purple footer */
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+    .navbar-links {
+        display: none;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .navbar-links a {
+        padding: 12px 15px;
+        width: 100%;
+        text-align: left;
+    }
+
+    .navbar-links.active {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: block;
+        background-color: #4B0082;
+        color: white;
+        padding: 12px;
+        border: none;
+        cursor: pointer;
+    }
+}
+
