@@ -15,15 +15,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from care import views
 from django.conf import settings
 from django.conf.urls.static import static
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.frontPageView.as_view(),name='frontpage'),
+    path('shop/', include('ecommerce.urls', namespace='ecommerce')),
+    path('',views.IndexPageView.as_view(),name='indexpage'),
+
+    path('frontpage/',views.frontPageView.as_view(),name='frontpage'),
     path('home/',views.HomePageView.as_view(),name='home'),
     path('signup/',views.signUpView.as_view(),name='signup'),
     path('signin/',views.SignInView.as_view(),name='signin'),
@@ -35,10 +39,16 @@ urlpatterns = [
     path('reminders/', views.ReminderListView.as_view(), name='reminder_list'),
     path('reminders/mark_completed/<int:reminder_id>/', views.MarkAsCompletedView.as_view(), name='mark_as_completed'),
     path('pregnancytips',views.PregnancyTipsView.as_view(),name='pregnancytip'),
-    path('baby-kick-tracking/',views.BabyKickTrackingView.as_view(), name='baby_kick_tracking'),
+    # path('baby-kick-tracking/',views.BabyKickTrackingView.as_view(), name='baby_kick_tracking'),
      path('diet-plans/', views.DietPlanListView.as_view(), name='diet_plans'),
      path('aboutus',views.AboutusView.as_view(),name='aboutus'),
      path('logout/',views.LogOutView.as_view(),name='logout')
 
 
+
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+
+

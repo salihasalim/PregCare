@@ -125,11 +125,7 @@
         </div>
     </div>
 
-    <!-- Display Baby Image based on Pregnancy Week -->
-    <div class="baby-size-image">
-        <h2>Baby's Growth Week: {{ pregnancy_week }}</h2>
-        <img src="{% static baby_image %}" alt="Your Baby's Size" class="baby-size-img" />
-    </div>
+    
 
     <div class="features">
         <div class="feature-box">
@@ -151,11 +147,7 @@
     </div>
 
     <div class="features">
-        <div class="feature-box">
-            <h3>Baby Growth Tracker</h3>
-            <p>Track your baby's growth and developmental milestones every week.</p>
-            <a href="{% url 'baby_kick_tracking' %}" class="cta-button">Track Growth</a>
-        </div>
+
         <div class="feature-box">
             <h3>Pregnancy Tips</h3>
             <p>Personalized Tips tailored to the baby's growth and milestones.</p>
@@ -167,12 +159,23 @@
             <p>Help users stay organized and maintain their health regimen</p>
             <a href="{% url 'add_reminder' %}" class="cta-button">Add Reminder</a>
         </div>
+        </div>
+        <div class="features">
         <div class="feature-box">
             <h3>Diet Plans</h3>
             <p>Help users stay organized and maintain their health regimen</p>
             <a href="{% url 'diet_plans' %}" class="cta-button">diet-plan</a>
         </div>
+
+        <div class="feature-box">
+            <h3> BY PRODUCTS</h3>
+            <p>Help users stay organized and maintain their health regimen</p>
+            <a href="{% url 'ecommerce:product_list' %}" class="cta-button">BUY-NOW</a>
+        </div>
     </div>
+</div>
+
+
 
     <footer>
         <p>&copy; 2025 Pregnancy Care. All Rights Reserved.</p>

@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Products | MomNourish{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'ecommerce:product_list' %}">Home</a></li>
+            {% if current_category %}
+                <li class="breadcrumb-item active">{{ current_category.name }}</li>
+            {% else %}
+                <li class="breadcrumb-item active">All Products</li>
+            {% endif %}
+        </ol>
+    </nav>
+    
+    <!-- Page Title -->
+    <div class="mb-4">
+        <h1>
+            {% if current_category %}
+                {{ current_category.name }}
+            {% else %}
+                All Products
+            {% endif %}
+        </h1>
+        {% if current_category and current_category.description %}
+            <p class="text-muted">{{ current_category.description }}</p>
+        {% endif %}
+    </div>
+    
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-lg-3 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Filters</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" action="">
+                        <!-- Trimester Filter -->
+                        <div class="mb-3">
+                            <h6>Trimester</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="trimester" id="trimester_all" value="" {% if not request.GET.trimester %}checked{% endif %}>
+                                <label class="form-check-label" for="trimester_all">All Trimesters</label>
+                            </div>
+                            {% for value, label in trimester_choices %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="trimester" id="trimester_{{ value }}" value="{{ value }}" {% if request.GET.trimester == value %}checked{% endif %}>
+                                <label class="form-check-label" for="trimester_{{ value }}">{{ label }}</label>
+                            </div>
+                            {% endfor %}
+                            
+                            {% if user_trimester %}
+                            <div class="mt-2">
+                                <span class="badge bg-info">Your trimester: {{ user_trimester }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Dietary Preferences -->
+                        <div class="mb-3">
+                            <h6>Dietary Preferences</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="organic" id="organic" value="1" {% if request.GET.organic %}checked{% endif %}>
+                                <label class="form-check-label" for="organic">Organic</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="gluten_free" id="gluten_free" value="1" {% if request.GET.gluten_free %}checked{% endif %}>
+                                <label class="form-check-label" for="gluten_free">Gluten-Free</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="dairy_free" id="dairy_free" value="1" {% if request.GET.dairy_free %}checked{% endif %}>
+                                <label class="form-check-label" for="dairy_free">Dairy-Free</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Preserve search term if any -->
+                        {% if request.GET.search %}
+                            <input type="hidden" name="search" value="{{ request.GET.search }}">
+                        {% endif %}
+                        
+                        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Categories -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Categories</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item {% if not current_category %}active{% endif %}">
+                            <a href="{% url 'ecommerce:product_list' %}" class="{% if not current_category %}text-white{% endif %}">All Products</a>
+                        </li>
+                        {% for category in categories %}
+                            <li class="list-group-item {% if current_category.id == category.id %}active{% endif %}">
+                                <a href="{{ category.get_absolute_url }}" class="{% if current_category.id == category.id %}text-white{% endif %}">
+                                    {{ category.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Grid -->
+        <div class="col-lg-9">
+            <!-- Sort Options -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <p class="mb-0">Showing {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ paginator.count }} products</p>
+                
+                <div class="d-flex align-items-center">
+                    <label for="sort_by" class="me-2">Sort by:</label>
+                    <form method="get" action="" id="sort_form">
+                        <!-- Preserve all filters -->
+                        {% for key, value in query_params.items %}
+                            {% if key != 'sort_by' %}
+                                <input type="hidden" name="{{ key }}" value="{{ value }}">
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <select class="form-select" name="sort_by" id="sort_by" onchange="document.getElementById('sort_form').submit()">
+                            <option value="name" {% if request.GET.sort_by == 'name' or not request.GET.sort_by %}selected{% endif %}>Name (A-Z)</option>
+                            <option value="price_low" {% if request.GET.sort_by == 'price_low' %}selected{% endif %}>Price (Low to High)</option>
+                            <option value="price_high" {% if request.GET.sort_by == 'price_high' %}selected{% endif %}>Price (High to Low)</option>
+                            <option value="newest" {% if request.GET.sort_by == 'newest' %}selected{% endif %}>Newest First</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Products -->
+            {% if products %}
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                    {% for product in products %}
+                        <div class="col">
+                            <div class="card h-100 product-card">
+                                {% if product.image %}
+                                    <a href="{{ ecommerce.get_absolute_url }}">
+                                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                                    </a>
+                                {% else %}
+                                    <a href="{{ ecommerce.get_absolute_url }}">
+                                        <img src="{% static 'img/no-image.jpg' %}" class="card-img-top" alt="No image">
+                                    </a>
+                                {% endif %}
+                                
+                                <!-- Tags/badges -->
+                                <div class="product-badges">
+                                    {% if product.is_organic %}
+                                        <span class="badge bg-success">Organic</span>
+                                    {% endif %}
+                                    {% if product.is_gluten_free %}
+                                        <span class="badge bg-warning">Gluten-Free</span>
+                                    {% endif %}
+                                    {% if product.is_dairy_free %}
+                                        <span class="badge bg-info">Dairy-Free</span>
+                                    {% endif %}
+                                    {% if product.discount_price %}
+                                        <span class="badge bg-danger">{{ product.get_discount_percentage }}% OFF</span>
+                                    {% endif %}
+                                    
+                                    {% if product.recommended_trimesters != 'All' %}
+                                        <span class="badge bg-primary">{{ product.recommended_trimesters }} Trimester</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">
+                                        <a href="{{ ecommerce.get_absolute_url }}" class="text-decoration-none text-dark">{{ product.name }}</a>
+                                    </h5>
+                                    
+                                    <div class="mb-2">
+                                        <!-- Price display -->
+                                        {% if product.discount_price %}
+                                            <span class="text-danger fw-bold">${{ product.discount_price }}</span>
+                                            <span class="text-muted text-decoration-line-through">${{ product.price }}</span>
+                                        {% else %}
+                                            <span class="fw-bold">${{ product.price }}</span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <p class="card-text flex-grow-1">{{ product.description|truncatechars:80 }}</p>
+                                    
+                                    <!-- Key Nutrients -->
+                                    {% if product.key_nutrients.all %}
+                                        <div class="mb-2">
+                                            <small class="text-muted">Key nutrients: 
+                                                {% for nutrient in product.key_nutrients.all|slice:":3" %}
+                                                    {{ nutrient.name }}{% if not forloop.last %}, {% endif %}
+                                                {% endfor %}
+                                                {% if product.key_nutrients.all|length > 3 %}...{% endif %}
+                                            </small>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <div class="d-grid gap-2 mt-auto">
+                                        <a href="{{ ecommerce.get_absolute_url }}" class="btn btn-primary btn-sm">View Details</a>
+                                        {% if product.stock > 0 %}
+                                            <form action="{% url 'ecommerce:cart_add' product.id %}" method="post" class="d-grid">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="quantity" value="1">
+                                                <button type="submit" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                                </button>
+                                            </form>
+                                        {% else %}
+                                            <button class="btn btn-outline-secondary btn-sm" disabled>Out of Stock</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pagination -->
+                {% if is_paginated %}
+                    <nav class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1{% if query_params %}&{{ query_params.urlencode }}{% endif %}">First</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">Previous</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">First</span>
+                                </li>
+                                <li class="page-item disabled">
+                                    <span class="page-link">Previous</span>
+                                </li>
+                            {% endif %}
+                            
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">Next</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">Last</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">Next</span>
+                                </li>
+                                <li class="page-item disabled">
+                                    <span class="page-link">Last</span>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+                
+            {% else %}
+                <div class="alert alert-info">
+                    No products found matching your criteria. <a href="{% url 'ecommerce:product_list' %}">View all products</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

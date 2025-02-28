@@ -38,6 +38,13 @@ from django.http import HttpResponse
 
 
 # Create your views here.
+class IndexPageView(View):
+
+    template_name='indexpage.html'
+
+    def get(self,request,*args,**kwargs):
+
+     return render(request,self.template_name)
 
 class frontPageView(View):
 
@@ -346,53 +353,53 @@ class PregnancyTipsView(View):
 # kick count'
 
 
-def check_kick_normality(kick_data):
-    """Check if the kick count is within the normal range for the trimester."""
-    kick_count = kick_data.kick_count  # Using 'kick_count' from your model
-    trimester = kick_data.trimester  # Using trimester from the model
+# def check_kick_normality(kick_data):
+#     """Check if the kick count is within the normal range for the trimester."""
+#     kick_count = kick_data.kick_count  # Using 'kick_count' from your model
+#     trimester = kick_data.trimester  # Using trimester from the model
 
-    # Trimester-specific kick count ranges
-    normal_kick_ranges = {
-        'First': (0, 10),  # First trimester kicks are less frequent
-        'Second': (10, 20),  # Second trimester may range higher
-        'Third': (20, 40),  # Third trimester kicks could range around this
-    }
+#     # Trimester-specific kick count ranges
+#     normal_kick_ranges = {
+#         'First': (0, 10),  # First trimester kicks are less frequent
+#         'Second': (10, 20),  # Second trimester may range higher
+#         'Third': (20, 40),  # Third trimester kicks could range around this
+#     }
 
-    min_kicks, max_kicks = normal_kick_ranges.get(trimester, (0, 0))
+#     min_kicks, max_kicks = normal_kick_ranges.get(trimester, (0, 0))
 
-    if kick_count<min_kicks:
-      return f"Your kick count is lower than expected for the {trimester} trimester. Please monitor and consult with your doctor if needed."
-    elif kick_count > max_kicks:
-        return f"Your kick count is higher than expected for the {trimester} trimester. Please consult with your doctor."
-    else:
-        return f"Your kick count is within the normal range for the {trimester} trimester."
-
-
+#     if kick_count<min_kicks:
+#       return f"Your kick count is lower than expected for the {trimester} trimester. Please monitor and consult with your doctor if needed."
+#     elif kick_count > max_kicks:
+#         return f"Your kick count is higher than expected for the {trimester} trimester. Please consult with your doctor."
+#     else:
+#         return f"Your kick count is within the normal range for the {trimester} trimester."
 
 
-class BabyKickTrackingView(LoginRequiredMixin, View):
-    template_name = 'baby_kick_tracking.html'
 
-    def get(self, request, *args, **kwargs):
-        # Initial form rendering
-        form = BabyKickForm()
-        return render(request, self.template_name, {'form': form})
 
-    def post(self, request, *args, **kwargs):
-        form = BabyKickForm(request.POST)
-        if form.is_valid():
-            kick_data = form.save(commit=False)
-            kick_data.user = request.user
-            kick_data.date = timezone.now().date()
-            kick_data.save()
+# class BabyKickTrackingView(LoginRequiredMixin, View):
+#     template_name = 'baby_kick_tracking.html'
 
-            # Check if the kick count is within normal range for the trimester
-            message = check_kick_normality(kick_data)
+#     def get(self, request, *args, **kwargs):
+#         # Initial form rendering
+#         form = BabyKickForm()
+#         return render(request, self.template_name, {'form': form})
 
-            # Render the form with the message
-            return render(request, self.template_name, {'form': form, 'message': message})
+#     def post(self, request, *args, **kwargs):
+#         form = BabyKickForm(request.POST)
+#         if form.is_valid():
+#             kick_data = form.save(commit=False)
+#             kick_data.user = request.user
+#             kick_data.date = timezone.now().date()
+#             kick_data.save()
 
-        return render(request, self.template_name, {'form': form})
+#             # Check if the kick count is within normal range for the trimester
+#             message = check_kick_normality(kick_data)
+
+#             # Render the form with the message
+#             return render(request, self.template_name, {'form': form, 'message': message})
+
+#         return render(request, self.template_name, {'form': form})
 
 
 

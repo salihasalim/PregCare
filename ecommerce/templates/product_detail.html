@@ -1,0 +1,195 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} | MomNourish{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'product_list' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item active">{{ product.name }}</li>
+        </ol>
+    </nav>
+    
+    <div class="row mb-5">
+        <!-- Product Image -->
+        <div class="col-md-5 mb-4">
+            <div class="card">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
+                {% else %}
+                    <img src="" class="card-img-top img-fluid" alt="No image">
+                {% endif %}
+                
+                <!-- Product badges -->
+                <div class="product-badges">
+                    {% if product.is_organic %}
+                        <span class="badge bg-success">Organic</span>
+                    {% endif %}
+                    {% if product.is_gluten_free %}
+                        <span class="badge bg-warning">Gluten-Free</span>
+                    {% endif %}
+                    {% if product.is_dairy_free %}
+                        <span class="badge bg-info">Dairy-Free</span>
+                    {% endif %}
+                    {% if product.discount_price %}
+                        <span class="badge bg-danger">{{ product.get_discount_percentage }}% OFF</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="col-md-7">
+            <h1 class="mb-3">{{ product.name }}</h1>
+            
+            <!-- Ratings -->
+            <div class="d-flex align-items-center mb-3">
+                <div class="rateyo-readonly" data-rateyo-rating="{{ avg_rating|default:'0' }}" data-rateyo-read-only="true"></div>
+                <span class="ms-2">
+                    {{ avg_rating|default:'0'|floatformat:1 }}/5
+                    ({{ reviews.count }} review{{ reviews.count|pluralize }})
+                </span>
+            </div>
+            
+            <!-- Price Info -->
+            <div class="mb-4">
+                {% if product.discount_price %}
+                    <span class="h3 text-danger me-2">${{ product.discount_price }}</span>
+                    <span class="h5 text-muted text-decoration-line-through">${{ product.price }}</span>
+                    <span class="badge bg-danger">{{ product.get_discount_percentage }}% OFF</span>
+                {% else %}
+                    <span class="h3">${{ product.price }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Stock Status -->
+            <div class="mb-3">
+                {% if product.stock > 0 %}
+                    <p class="text-success mb-0">
+                        <i class="fas fa-check-circle"></i> In Stock ({{ product.stock }} available)
+                    </p>
+                {% else %}
+                    <p class="text-danger mb-0">
+                        <i class="fas fa-times-circle"></i> Out of Stock
+                    </p>
+                {% endif %}
+            </div>
+            
+            <!-- Product Description -->
+            <div class="mb-4">
+                <h5>Description</h5>
+                <p>{{ product.description }}</p>
+            </div>
+            
+            <!-- Recommended Trimesters -->
+            <div class="mb-4">
+                <h5>Recommended For</h5>
+                {% if product.recommended_trimesters == 'All' %}
+                    <p><i class="fas fa-check text-success"></i> Suitable for all trimesters</p>
+                {% else %}
+                    <p>
+                        <i class="fas fa-check text-success"></i> 
+                        {{ product.recommended_trimesters|replace:","|replace:"&" }} Trimester
+                    </p>
+                {% endif %}
+                
+                {% if user_trimester and trimester_benefit %}
+                    <div class="alert alert-info mt-2">
+                        <h6 class="mb-1"><i class="fas fa-info-circle"></i> Benefits for your trimester ({{ user_trimester }})</h6>
+                        <p class="mb-0">{{ trimester_benefit.benefit_description }}</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Key Nutrients -->
+            {% if product.key_nutrients.all %}
+                <div class="mb-4">
+                    <h5>Key Nutrients</h5>
+                    <div class="row">
+                        {% for nutrient in product.key_nutrients.all %}
+                            <div class="col-md-6 mb-1">
+                                <i class="fas fa-seedling text-success"></i> {{ nutrient.name }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            
+            <!-- Nutrition Facts -->
+            <div class="mb-4">
+                <h5>Nutrition Facts (per serving)</h5>
+                <div class="row">
+                    <div class="col-6 col-md-3 mb-2">
+                        <div class="nutrition-item">
+                            <h6 class="mb-0">Calories</h6>
+                            <p class="mb-0">{{ product.calories }}</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-2">
+                        <div class="nutrition-item">
+                            <h6 class="mb-0">Protein</h6>
+                            <p class="mb-0">{{ product.protein }}g</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-2">
+                        <div class="nutrition-item">
+                            <h6 class="mb-0">Carbs</h6>
+                            <p class="mb-0">{{ product.carbohydrates }}g</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-2">
+                        <div class="nutrition-item">
+                            <h6 class="mb-0">Fats</h6>
+                            <p class="mb-0">{{ product.fats }}g</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-2">
+                        <div class="nutrition-item">
+                            <h6 class="mb-0">Fiber</h6>
+                            <p class="mb-0">{{ product.fiber }}g</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-2">
+                        <div class="nutrition-item">
+                            <h6 class="mb-0">Iron</h6>
+                            <p class="mb-0">{{ product.iron }}mg</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-2">
+                        <div class="nutrition-item">
+                            <h6 class="mb-0">Calcium</h6>
+                            <p class="mb-0">{{ product.calcium }}mg</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3 mb-2">
+                        <div class="nutrition-item">
+                            <h6 class="mb-0">Folate</h6>
+                            <p class="mb-0">{{ product.folate }}mcg</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add to Cart Form -->
+            {% if product.stock > 0 %}
+                <form action="{% url 'cart_add' product.id %}" method="post" class="mb-3">
+                    {% csrf_token %}
+                    <div class="row g-2">
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <button type="button" class="btn btn-outline-secondary quantity-btn" data-action="decrease">-</button>
+                                <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control text-center" id="quantity">
+                                <button type="button" class="btn btn-outline-secondary quantity-btn" data-action
+
+
+
+
