@@ -682,3 +682,13 @@ def set_default_address(request, address_id):
     
     messages.success(request, f'{address.name}, {address.city} set as your default address.')
     return redirect('address_list')
+
+def product_list(request):
+    """View to display the list of all available products"""
+    products = Product.objects.filter(available=True, is_active=True)
+    return render(request, 'products/list.html', {'products': products})
+
+def product_detail(request, id, slug):
+    """View to display a single product's details"""
+    product = get_object_or_404(Product, id=id, slug=slug, available=True, is_active=True)
+    return render(request, 'products/detail.html', {'product': product})

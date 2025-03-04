@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.urls import path
 from ecommerce import views
+from django.conf import settings
+from django.conf.urls.static import static
+
 app_name = 'ecommerce'
 
 urlpatterns = [
@@ -10,7 +13,7 @@ urlpatterns = [
     path('products/<int:id>/<slug:slug>/', views.ProductDetailView.as_view(), name='product_detail'),
     path('products/<int:product_id>/review/', views.add_product_review, name='add_product_review'),
     path('recommended-products/', views.recommended_products, name='recommended_products'),
-    
+    path('<int:id>/<slug:slug>/', product_detail, name='product_detail'),
     # Cart URLs
     path('cart/', views.cart_detail, name='cart_detail'),
     path('cart/add/<int:product_id>/', views.cart_add, name='cart_add'),
@@ -35,4 +38,4 @@ urlpatterns = [
     path('addresses/<int:address_id>/edit/', views.address_edit, name='address_edit'),
     path('addresses/<int:address_id>/delete/', views.address_delete, name='address_delete'),
     path('addresses/<int:address_id>/set-default/', views.set_default_address, name='set_default_address'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

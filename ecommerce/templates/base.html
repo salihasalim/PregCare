@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +26,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'product_list' %}">Shop</a>
+                            <a class="nav-link" href="{% url 'ecommerce:product_list' %}">Shop</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
@@ -38,12 +39,12 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'recommended_products' %}">Recommendations</a>
+                            <a class="nav-link" href="{% url 'ecommerce:recommended_products' %}">Recommendations</a>
                         </li>
                     </ul>
                     
                     <!-- Search Form -->
-                    <form class="d-flex me-auto" method="get" action="{% url 'product_list' %}">
+                    <form class="d-flex me-auto" method="get" action="{% url 'ecommerce:product_list' %}">
                         <input class="form-control me-2" type="search" name="search" placeholder="Search products..." value="{{ request.GET.search|default:'' }}">
                         <button class="btn btn-outline-primary" type="submit">Search</button>
                     </form>
@@ -52,12 +53,12 @@
                     <ul class="navbar-nav ms-auto">
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'wishlist' %}">
+                                <a class="nav-link" href="{% url 'ecommerce:wishlist' %}">
                                     <i class="fas fa-heart"></i> Wishlist
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'cart_detail' %}">
+                                <a class="nav-link" href="{% url 'ecommerce:cart_detail' %}">
                                     <i class="fas fa-shopping-cart"></i> Cart
                                     <span class="badge bg-primary">{{ request.user.cart.get_total_items|default:"0" }}</span>
                                 </a>
@@ -68,8 +69,8 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" href="{% url 'profile' %}">My Profile</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'order_list' %}">My Orders</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'address_list' %}">My Addresses</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'ecommerce:order_list' %}">My Orders</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'ecommerce:address_list' %}">My Addresses</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                                 </ul>

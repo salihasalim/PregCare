@@ -1,0 +1,386 @@
+/* Global Styles */
+:root {
+    --primary-color: #6a5acd;
+    --secondary-color: #8a2be2;
+    --accent-color: #ff69b4;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --success-color: #28a745;
+    --info-color: #17a2b8;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --body-color: #f9f7fe;
+    --text-color: #333333;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  body {
+    font-family: 'Nunito', sans-serif;
+    background-color: var(--body-color);
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+  
+  /* Header Styling */
+  .navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 12px 0;
+  }
+  
+  .navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+  }
+  
+  .navbar-brand span {
+    background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  .nav-link {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin: 0 5px;
+    transition: color 0.3s;
+  }
+  
+  .nav-link:hover {
+    color: var(--primary-color);
+  }
+  
+  .dropdown-menu {
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    border: none;
+    padding: 10px;
+  }
+  
+  .dropdown-item {
+    padding: 8px 16px;
+    transition: background-color 0.3s;
+  }
+  
+  .dropdown-item:hover {
+    background-color: rgba(106, 90, 205, 0.1);
+  }
+  
+  /* Search Form */
+  .form-control {
+    border-radius: 20px;
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+  }
+  
+  .form-control:focus {
+    box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.25);
+    border-color: var(--primary-color);
+  }
+  
+  .btn-outline-primary {
+    border-radius: 20px;
+    padding: 8px 20px;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  /* Cart and Wishlist Icons */
+  .fa-heart, .fa-shopping-cart {
+    color: var(--accent-color);
+  }
+  
+  .badge {
+    position: relative;
+    top: -2px;
+    padding: 4px 8px;
+    border-radius: 10px;
+  }
+  
+  /* Main Content Area */
+  main {
+    min-height: 65vh;
+  }
+  
+  /* Card Styling */
+  .card {
+    border: none;
+    border-radius: var(--border-radius);
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .card-title {
+    font-weight: 700;
+    color: var(--dark-color);
+  }
+  
+  .card-text {
+    color: #666;
+  }
+  
+  /* Product Price */
+  .price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+  
+  /* Buttons */
+  .btn {
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+  }
+  
+  .btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+  }
+  
+  .btn-info {
+    background-color: var(--info-color);
+    border-color: var(--info-color);
+  }
+  
+  /* Alerts */
+  .alert {
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: var(--box-shadow);
+  }
+  
+  /* Footer Styling */
+  footer {
+    background-color: white !important;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  footer h5 {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+  
+  footer a {
+    color: var(--dark-color);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  footer a:hover {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+  
+  .social-icons a {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    background-color: var(--light-color);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 36px;
+    margin-right: 10px;
+    transition: all 0.3s;
+  }
+  
+  .social-icons a:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  /* Category Pills */
+  .category-pill {
+    background-color: rgba(106, 90, 205, 0.1);
+    color: var(--primary-color);
+    border-radius: 50px;
+    padding: 5px 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+  
+  /* Product Grid */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Pagination */
+  .pagination .page-link {
+    color: var(--primary-color);
+    border-radius: 5px;
+    margin: 0 3px;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+  
+  /* Product Detail Page */
+  .product-detail-img {
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    max-height: 400px;
+    object-fit: cover;
+  }
+  
+  .nutrition-info {
+    background-color: rgba(106, 90, 205, 0.05);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-top: 20px;
+  }
+  
+  /* Form Styling */
+  .form-label {
+    font-weight: 600;
+    color: var(--dark-color);
+  }
+  
+  textarea.form-control {
+    min-height: 120px;
+  }
+  
+  /* Login & Register */
+  .auth-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+  }
+  
+  .auth-container h2 {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  /* Profile Section */
+  .profile-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 20px;
+  }
+  
+  .profile-info {
+    padding-left: 20px;
+  }
+  
+  /* Trimester Tags */
+  .trimester-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: var(--info-color);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  
+  .trimester-1 {
+    background-color: #ff9f43;
+  }
+  
+  .trimester-2 {
+    background-color: #1dd1a1;
+  }
+  
+  .trimester-3 {
+    background-color: #54a0ff;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .navbar-brand {
+      font-size: 1.2rem;
+    }
+    
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .product-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .profile-info {
+      padding-left: 0;
+      margin-top: 20px;
+    }
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease forwards;
+  }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+  }

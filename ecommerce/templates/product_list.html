@@ -1,9 +1,62 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block title %}Products | MomNourish{% endblock %}
-
-{% block content %}
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/base_style.css' %}">
+    <title>Product Catalog</title>
+    <!-- Add Bootstrap CSS if not already included in base_style.css -->
+    <style>
+        /* Custom styles for card group layout */
+        .card-group {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -0.75rem;
+            margin-left: -0.75rem;
+        }
+        
+        .card-group > .card {
+            flex: 0 0 calc(33.333% - 1.5rem);
+            margin: 0 0.75rem 1.5rem 0.75rem;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .card-group > .card {
+                flex: 0 0 calc(50% - 1.5rem);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .card-group > .card {
+                flex: 0 0 calc(100% - 1.5rem);
+            }
+        }
+        
+        .product-badges {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 10;
+        }
+        
+        .product-card {
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    
 <div class="container">
     <!-- Breadcrumbs -->
     <nav aria-label="breadcrumb">
@@ -136,12 +189,12 @@
                 </div>
             </div>
             
-            <!-- Products -->
             {% if products %}
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                <!-- Products -->
+                <div class="card-group">
                     {% for product in products %}
-                        <div class="col">
-                            <div class="card h-100 product-card">
+                        <div class="card product-card">
+                            <div class="position-relative">
                                 {% if product.image %}
                                     <a href="{{ ecommerce.get_absolute_url }}">
                                         <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
@@ -171,50 +224,52 @@
                                         <span class="badge bg-primary">{{ product.recommended_trimesters }} Trimester</span>
                                     {% endif %}
                                 </div>
+                            </div>
+                            
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">
+                                    <a href="{{ ecommerce.get_absolute_url }}" class="text-decoration-none text-dark">{{ product.name }}</a>
+                                </h5>
                                 
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title">
-                                        <a href="{{ ecommerce.get_absolute_url }}" class="text-decoration-none text-dark">{{ product.name }}</a>
-                                    </h5>
-                                    
-                                    <div class="mb-2">
-                                        <!-- Price display -->
-                                        {% if product.discount_price %}
-                                            <span class="text-danger fw-bold">${{ product.discount_price }}</span>
-                                            <span class="text-muted text-decoration-line-through">${{ product.price }}</span>
-                                        {% else %}
-                                            <span class="fw-bold">${{ product.price }}</span>
-                                        {% endif %}
-                                    </div>
-                                    
-                                    <p class="card-text flex-grow-1">{{ product.description|truncatechars:80 }}</p>
-                                    
-                                    <!-- Key Nutrients -->
-                                    {% if product.key_nutrients.all %}
-                                        <div class="mb-2">
-                                            <small class="text-muted">Key nutrients: 
-                                                {% for nutrient in product.key_nutrients.all|slice:":3" %}
-                                                    {{ nutrient.name }}{% if not forloop.last %}, {% endif %}
-                                                {% endfor %}
-                                                {% if product.key_nutrients.all|length > 3 %}...{% endif %}
-                                            </small>
-                                        </div>
+                                <div class="mb-2">
+                                    <!-- Price display -->
+                                    {% if product.discount_price %}
+                                        <span class="text-danger fw-bold">${{ product.discount_price }}</span>
+                                        <span class="text-muted text-decoration-line-through">${{ product.price }}</span>
+                                    {% else %}
+                                        <span class="fw-bold">${{ product.price }}</span>
                                     {% endif %}
-                                    
-                                    <div class="d-grid gap-2 mt-auto">
-                                        <a href="{{ ecommerce.get_absolute_url }}" class="btn btn-primary btn-sm">View Details</a>
-                                        {% if product.stock > 0 %}
-                                            <form action="{% url 'ecommerce:cart_add' product.id %}" method="post" class="d-grid">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="quantity" value="1">
-                                                <button type="submit" class="btn btn-outline-primary btn-sm">
-                                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
-                                                </button>
-                                            </form>
-                                        {% else %}
-                                            <button class="btn btn-outline-secondary btn-sm" disabled>Out of Stock</button>
-                                        {% endif %}
+                                </div>
+                                
+                                <p class="card-text flex-grow-1">{{ product.description|truncatechars:80 }}</p>
+                                
+                                <!-- Key Nutrients -->
+                                {% if product.key_nutrients.all %}
+                                    <div class="mb-2">
+                                        <small class="text-muted">Key nutrients: 
+                                            {% for nutrient in product.key_nutrients.all|slice:":3" %}
+                                                {{ nutrient.name }}{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                            {% if product.key_nutrients.all|length > 3 %}...{% endif %}
+                                        </small>
                                     </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="card-footer bg-transparent border-top-0">
+                                <div class="d-grid gap-2">
+                                    <a href="{{ ecommerce.get_absolute_url }}" class="btn btn-primary btn-sm">View Details</a>
+                                    {% if product.stock > 0 %}
+                                        <form action="{% url 'ecommerce:cart_add' product.id %}" method="post" class="d-grid">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <button class="btn btn-outline-secondary btn-sm" disabled>Out of Stock</button>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -271,7 +326,6 @@
                         </ul>
                     </nav>
                 {% endif %}
-                
             {% else %}
                 <div class="alert alert-info">
                     No products found matching your criteria. <a href="{% url 'ecommerce:product_list' %}">View all products</a>
@@ -280,4 +334,6 @@
         </div>
     </div>
 </div>
-{% endblock %}
+
+</body>
+</html>

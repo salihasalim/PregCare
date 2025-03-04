@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- ecommerce/includes/product_card.html -->
+<div class="card product-card h-100">
+    {% if product.image %}
+        <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
+    {% else %}
+        <div class="card-img-top bg-light text-center py-4">
+            <i class="fas fa-image fa-3x text-muted"></i>
+        </div>
+    {% endif %}
+    
+    <!-- Product badges -->
+    <div class="product-badges">
+        {% if product.is_organic %}
+            <span class="badge bg-success">Organic</span>
+        {% endif %}
+        {% if product.is_gluten_free %}
+            <span class="badge bg-warning">Gluten-Free</span>
+        {% endif %}
+        {% if product.is_dairy_free %}
+            <span class="badge bg-info">Dairy-Free</span>
+        {% endif %}
+        {% if product.discount_price %}
+            <span class="badge bg-danger">{{ product.get_discount_percentage }}% OFF</span>
+        {% endif %}
+    </div>
+    
+    <div class="card-body">
+        <h5 class="card-title">{{ product.name }}</h5>
+        
+        <div class="d-flex align-items-center mb-2">
+            <div class="rateyo-readonly" data-rateyo-rating="{{ product.avg_rating|default:'0' }}" data-rateyo-read-only="true" data-rateyo-star-width="16px"></div>
+            <small class="ms-2 text-muted">{{ product.avg_rating|default:'0'|floatformat:1 }}/5</small>
+        </div>
+        
+        <div class="mb-2">
+            {% if product.discount_price %}
+                <span class="text-danger fw-bold me-2">${{ product.discount_price }}</span>
+                <span class="text-muted text-decoration-line-through small">${{ product.price }}</span>
+            {% else %}
+                <span class="fw-bold">${{ product.price }}</span>
+            {% endif %}
+        </div>
+        
+        <p class="card-text small text-muted">
+            {% if product.description|length > 60 %}
+                {{ product.description|slice:":60" }}...
+            {% else %}
+                {{ product.description }}
+            {% endif %}
+        </p>
+    </div>
+    
+    <div class="card-footer bg-white border-top-0">
+        <div class="d-grid">
+            <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary">View Details</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
