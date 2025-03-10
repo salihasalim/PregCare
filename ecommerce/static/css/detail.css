@@ -1,0 +1,314 @@
+<style>
+  /* General Styles */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    background-color: #f9f9f9;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  /* Tab Navigation */
+  .nav-pills .nav-link {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #555;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+  }
+
+  .nav-pills .nav-link.active {
+    background-color: #5e8b7e;
+    color: #fff;
+  }
+
+  .nav-pills .nav-link:hover {
+    background-color: #a7c4bc;
+    color: #fff;
+  }
+
+  /* Standard Style */
+  .standard-style .breadcrumb {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+
+  .standard-style .breadcrumb-item a {
+    color: #5e8b7e;
+    text-decoration: none;
+  }
+
+  .standard-style .card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .standard-style .product-badges {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .standard-style .badge {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 4px;
+  }
+
+  .standard-style .nutrition-item {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #fff;
+  }
+
+  .standard-style .nutrition-item h6 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .standard-style .nutrition-item p {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #5e8b7e;
+  }
+
+  .standard-style .btn-primary {
+    background-color: #5e8b7e;
+    border-color: #5e8b7e;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+  }
+
+  .standard-style .btn-success {
+    background-color: #2a9d8f;
+    border-color: #2a9d8f;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+  }
+
+  .standard-style .alert {
+    border-radius: 6px;
+  }
+
+  /* Enhanced Style */
+  .enhanced-style {
+    --primary-color: #5e8b7e;
+    --secondary-color: #a7c4bc;
+    --accent-color: #dfeeea;
+    --danger-color: #e76f51;
+    --warning-color: #f4a261;
+    --info-color: #2a9d8f;
+    --light-gray: #f8f9fa;
+    --dark-gray: #6c757d;
+  }
+
+  .enhanced-style .breadcrumb {
+    background-color: var(--accent-color);
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+  }
+
+  .enhanced-style .breadcrumb-item a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+
+  .enhanced-style .card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: none;
+  }
+
+  .enhanced-style .product-image-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .enhanced-style .product-image-container img {
+    transition: transform 0.3s ease;
+  }
+
+  .enhanced-style .product-image-container:hover img {
+    transform: scale(1.05);
+  }
+
+  .enhanced-style .product-badges {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .enhanced-style .badge {
+    padding: 8px 12px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border-radius: 6px;
+  }
+
+  .enhanced-style .bg-success {
+    background-color: var(--primary-color) !important;
+  }
+
+  .enhanced-style .bg-warning {
+    background-color: var(--warning-color) !important;
+  }
+
+  .enhanced-style .bg-info {
+    background-color: var(--info-color) !important;
+  }
+
+  .enhanced-style .bg-danger {
+    background-color: var(--danger-color) !important;
+  }
+
+  .enhanced-style h1 {
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  .enhanced-style .price-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .enhanced-style .price-container .current-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--danger-color);
+    margin-right: 12px;
+  }
+
+  .enhanced-style .price-container .old-price {
+    font-size: 1.1rem;
+    text-decoration: line-through;
+    color: var(--dark-gray);
+    margin-right: 10px;
+  }
+
+  .enhanced-style .stock-status {
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+
+  .enhanced-style .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+    position: relative;
+    padding-bottom: 8px;
+  }
+
+  .enhanced-style .section-title:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background-color: var(--primary-color);
+  }
+
+  .enhanced-style .nutrition-item {
+    background-color: var(--accent-color);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    height: 100%;
+    transition: transform 0.2s;
+  }
+
+  .enhanced-style .nutrition-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .enhanced-style .nutrition-item h6 {
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+
+  .enhanced-style .nutrition-item p {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-top: 5px;
+  }
+
+  .enhanced-style .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 6px;
+  }
+
+  .enhanced-style .btn-success {
+    background-color: var(--info-color);
+    border-color: var(--info-color);
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 6px;
+  }
+
+  .enhanced-style .btn-outline-secondary {
+    border-color: var(--secondary-color);
+    color: var(--primary-color);
+  }
+
+  .enhanced-style .quantity-input {
+    border-color: var(--secondary-color);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .enhanced-style .nav-tabs .nav-link {
+    color: var(--dark-gray);
+    font-weight: 600;
+    padding: 10px 20px;
+  }
+
+  .enhanced-style .nav-tabs .nav-link.active {
+    color: var(--primary-color);
+    border-bottom: 3px solid var(--primary-color);
+  }
+
+  .enhanced-style .reviews-list .card {
+    margin-bottom: 15px;
+    transition: transform 0.2s;
+  }
+
+  .enhanced-style .reviews-list .card:hover {
+    transform: translateY(-3px);
+  }
+</style>

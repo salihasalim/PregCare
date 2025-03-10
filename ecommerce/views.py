@@ -36,23 +36,31 @@ class ProductListView(ListView):
             category = get_object_or_404(ProductCategory, slug=category_slug)
             queryset = queryset.filter(category=category)
         
+        # 
         # Filter by trimester if specified
-        trimester = self.request.GET.get('trimester')
-        if trimester:
-            queryset = queryset.filter(
-                Q(recommended_trimesters=trimester) | 
-                Q(recommended_trimesters='All') |
-                Q(recommended_trimesters__contains=trimester)
-            )
-        
-        # Filter by dietary requirements
-        if self.request.GET.get('organic'):
-            queryset = queryset.filter(is_organic=True)
-        if self.request.GET.get('gluten_free'):
-            queryset = queryset.filter(is_gluten_free=True)
-        if self.request.GET.get('dairy_free'):
-            queryset = queryset.filter(is_dairy_free=True)
-        
+            trimester = self.request.GET.get('trimester')
+            if trimester:
+                queryset = queryset.filter(
+                    Q(recommended_trimesters=trimester) | 
+                    Q(recommended_trimesters='All') | 
+                    Q(recommended_trimesters__icontains=trimester)  # Case insensitive search
+                )
+
+            # Convert GET params to boolean
+            def str_to_bool(value):
+                return str(value).lower() in ('true', '1', 'yes')
+
+            # Apply dietary filters
+            if str_to_bool(self.request.GET.get('organic', 'false')):
+                queryset = queryset.filter(is_organic=True)
+            if str_to_bool(self.request.GET.get('gluten_free', 'false')):
+                queryset = queryset.filter(is_gluten_free=True)
+            if str_to_bool(self.request.GET.get('dairy_free', 'false')):
+                queryset = queryset.filter(is_dairy_free=True)
+
+            # Debugging: Print the generated SQL
+            print(queryset.query)
+
         # Search functionality
         search_query = self.request.GET.get('search', '')
         if search_query:
@@ -691,4 +699,4 @@ def product_list(request):
 def product_detail(request, id, slug):
     """View to display a single product's details"""
     product = get_object_or_404(Product, id=id, slug=slug, available=True, is_active=True)
-    return render(request, 'products/detail.html', {'product': product})
+    return render(request, 'product_detail.html', {'product': product})

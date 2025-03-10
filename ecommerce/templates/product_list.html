@@ -35,6 +35,7 @@
         }
         
         .product-badges {
+            
             position: absolute;
             top: 10px;
             right: 10px;
@@ -255,18 +256,20 @@
                                     </div>
                                 {% endif %}
                             </div>
-                            
                             <div class="card-footer bg-transparent border-top-0">
-                                <div class="d-grid gap-2">
-                                    <a href="{{ ecommerce.get_absolute_url }}" class="btn btn-primary btn-sm">View Details</a>
-                                    {% if product.stock > 0 %}
-                                        <form action="{% url 'ecommerce:cart_add' product.id %}" method="post" class="d-grid">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="quantity" value="1">
-                                            <button type="submit" class="btn btn-outline-primary btn-sm">
-                                                <i class="fas fa-shopping-cart me-1"></i> Add to Cart
-                                            </button>
-                                        </form>
+    <div class="d-flex gap-2">
+        <a href="{% url 'ecommerce:product_detail' product.id product.slug %}" class="btn btn-primary btn-sm">View</a>
+        {% if product.stock > 0 %}
+        <form action="{% url 'ecommerce:cart_add' product.id %}" method="post" class="flex-grow-1">
+            {% csrf_token %}
+            <input type="hidden" name="quantity" value="1">
+            <!-- Add this hidden input to specify redirection -->
+            <input type="hidden" name="redirect_to_cart" value="1">
+            <button type="submit" class="btn btn-outline-primary btn-sm w-100">
+                <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+            </button>
+        </form>
+        
                                     {% else %}
                                         <button class="btn btn-outline-secondary btn-sm" disabled>Out of Stock</button>
                                     {% endif %}
