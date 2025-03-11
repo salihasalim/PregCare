@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>PreCare - Prenatal Care Products</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        :root {
+            --primary: #ff6b98;
+            --secondary: #8c3c5d;
+            --light: #fff1f5;
+            --dark: #333333;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            color: var(--secondary);
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin: 0 15px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .active {
+            color: var(--primary) !important;
+            font-weight: 600 !important;
+        }
+        
+        .search-form {
+            display: flex;
+            align-items: center;
+            background-color: var(--light);
+            border-radius: 50px;
+            overflow: hidden;
+            padding: 5px 15px;
+            width: 300px;
+        }
+        
+        .search-form input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            padding: 8px 10px;
+        }
+        
+        .search-form button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+        
+        .icons-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .icon-btn {
+            position: relative;
+            background: none;
+            border: none;
+            margin-left: 20px;
+            cursor: pointer;
+            color: var(--dark);
+            transition: color 0.3s;
+        }
+        
+        .icon-btn:hover {
+            color: var(--primary);
+        }
+        
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--primary);
+            color: white;
+            font-size: 10px;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 250px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 200;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .cart-items {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .cart-item {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        
+        .cart-item-details h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .cart-item-details p {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+        
+        .checkout-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .checkout-btn:hover {
+            background-color: var(--secondary);
+        }
+        
+        .user-dropdown {
+            padding: 10px 0;
+        }
+        
+        .user-dropdown a {
+            display: block;
+            padding: 8px 15px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: background-color 0.3s;
+        }
+        
+        .user-dropdown a:hover {
+            background-color: var(--light);
+        }
+        
+        @media (max-width: 992px) {
+            .search-form {
+                width: 200px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: block;
+            }
+            
+            .nav-links, .search-form {
+                display: none;
+            }
+            
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background-color: white;
+                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+            }
+            
+            .nav-links.active li {
+                margin: 10px 0;
+            }
+            
+            .search-form.active {
+                display: flex;
+                width: 100%;
+                margin-top: 15px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-seedling fa-2x"></i> 
+            <h1>PregCare</h1>
+        </div>
+        
+        <button class="menu-btn" id="menuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <ul class="nav-links" id="navLinks">
+            <li><a href="{%url 'home'%}" class="active">Home</a></li>
+            <li><a href="{%url 'ecommerce:product_list'%}">Products</a></li>
+            <li><a href="#">Baby Registry</a></li>
+            <li><a href="#">Blog</a></li>
+        </ul>
+        
+        <form class="search-form" id="searchForm">
+            <input type="text" placeholder="Search products, articles...">
+            <button type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+        
+        <div class="icons-group">
+            <!-- Cart Link -->
+            <a href="{% url 'ecommerce:cart-summary' %}" class="icon-link">
+                <i class="fas fa-shopping-cart fa-2x"></i>
+                <span class="badge">3</span>
+            </a>
+        
+            
+        
+            <!-- Orders Link -->
+            <a href="{% url 'ecommerce:order-summary' %}" class="icon-link">
+                <i class="fas fa-clipboard-list fa-2x"></i>
+                <span class="badge">2</span>
+            </a>
+        </div>
+        
+    </nav>
+
+    <script>
+        document.getElementById('menuBtn').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+            document.getElementById('searchForm').classList.toggle('active');
+        });
+    </script>
+
+    {%block main1_block%}
+    {%endblock%}
+</body>
+</html>

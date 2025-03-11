@@ -188,3 +188,19 @@ class DietPlan(models.Model):
 
 
 
+
+class ExerciseYoga(models.Model):
+    TRIMESTER_CHOICES = [
+        (1, "First Trimester"),
+        (2, "Second Trimester"),
+        (3, "Third Trimester"),
+        (4, "Postpartum"),
+    ]
+
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.ImageField(upload_to="exercise_yoga/")
+    trimester = models.IntegerField(choices=TRIMESTER_CHOICES)  # New field for filtering
+    
+    def __str__(self):
+        return f"{self.name} ({self.get_trimester_display()})"

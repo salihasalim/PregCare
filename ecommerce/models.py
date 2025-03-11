@@ -97,214 +97,106 @@ class Product(models.Model):
         if self.discount_price:
             return int(100 - (self.discount_price * 100) / self.price)
         return 0
-
-
-class Cart(models.Model):
-    """Shopping cart model"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
     
-    def __str__(self):
-        return f"Cart {self.id}"
-    
-    def get_total_price(self):
-        return sum(item.get_cost() for item in self.items.all())
-    
-    def get_total_items(self):
-        return sum(item.quantity for item in self.items.all())
 
 
-class CartItem(models.Model):
-    """Individual items in a cart"""
-    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, related_name='cart_items', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-    
-    def __str__(self):
-        return f"{self.quantity} of {self.product.name}"
-    
-    def get_cost(self):
-        if self.product.discount_price:
-            return self.product.discount_price * self.quantity
-        return self.product.price * self.quantity
+class CartModel(models.Model):
+
+    product_object=models.ForeignKey(Product,on_delete=models.CASCADE)
+
+    owner=models.ForeignKey(User,on_delete=models.CASCADE)
+
+    quantity=models.PositiveIntegerField()
+
+    is_order_placed=models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now_add=True)
 
 
-class Order(models.Model):
-    """Order model for completed purchases"""
-    ORDER_STATUS = (
-        ('pending', 'Pending'),
-        ('processing', 'Processing'),
-        ('shipped', 'Shipped'),
-        ('delivered', 'Delivered'),
-        ('cancelled', 'Cancelled'),
+    def item_total(self):
+
+        return self.quantity*self.product_object.price
+
+
+class OrderModel(models.Model):
+
+    customer=models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
+
+    address=models.TextField(null=False, blank=False)
+
+    phone=models.CharField(max_length=20, null=False, blank=False)
+    
+    PAYMENT_OPTIONS=(
+        ("COD","COD"),
+        ("ONLINE","ONLINE")
     )
+
+    payment_method=models.CharField(max_length=15, choices=PAYMENT_OPTIONS, default="COD")
+
+    rzp_order_id=models.CharField(max_length=100, null=True)
+
+    is_paid=models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    def order_total(self):
+
+        total = 0
+
+        order_items=self.orderitems.all()
+
+        if order_items:
+
+            total = sum([oi.item_total() for oi in order_items])
+
+        return total    
     
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
-    address = models.CharField(max_length=250)
-    postal_code = models.CharField(max_length=20)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    status = models.CharField(max_length=20, choices=ORDER_STATUS, default='pending')
-    shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
-    paid = models.BooleanField(default=False)
-    payment_method = models.CharField(max_length=20, choices=[
-        ('cod', 'Cash on Delivery'),
-        ('card', 'Credit/Debit Card'),
-        ('upi', 'UPI'),
-        ('wallet', 'Digital Wallet')
-    ], default='cod')
+
+
+class OrderItemModel(models.Model):
+
+    order_object=models.ForeignKey(OrderModel,on_delete=models.CASCADE, related_name="orderitems")
+
+    product_object=models.ForeignKey(Product, on_delete=models.CASCADE)
     
-    # Integrate with existing pregnancy info
-    trimester = models.CharField(max_length=20, choices=[
-        ('First', 'First Trimester'),
-        ('Second', 'Second Trimester'),
-        ('Third', 'Third Trimester')
-    ], blank=True, null=True)
-    special_dietary_needs = models.TextField(blank=True)
+    quantity=models.PositiveIntegerField(default=1)
     
-    class Meta:
-        ordering = ('-created_date',)
-    
+    price=models.FloatField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    def item_total(self):
+        
+        return self.price*self.quantity  
+
+
+class ReviewModels(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")
+
+    rating = models.PositiveSmallIntegerField(choices=[(i, i) for i in range(1, 6)])  # 1-5 rating
+
+    review_text = models.TextField(blank=True, null=True)
+
+    images = models.ImageField(upload_to="review_images/", blank=True, null=True)
+
+    verified_purchase = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+
     def __str__(self):
-        return f'Order {self.id}'
-    
-    def get_total_cost(self):
-        return sum(item.get_cost() for item in self.items.all()) + self.shipping_cost
-    
-    def get_items_count(self):
-        return sum(item.quantity for item in self.items.all())
+        return f"{self.user.username} - {self.product.name} ({self.rating} stars)"        
 
 
-class OrderItem(models.Model):
-    """Individual items within an order"""
-    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.PositiveIntegerField(default=1)
-    
-    def __str__(self):
-        return f'{self.id}'
-    
-    def get_cost(self):
-        return self.price * self.quantity
 
-
-class ProductReview(models.Model):
-    """Customer reviews for products"""
-    product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
-    rating = models.PositiveSmallIntegerField(choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')])
-    review_text = models.TextField()
-    trimester_when_used = models.CharField(max_length=20, choices=[
-        ('First', 'First Trimester'),
-        ('Second', 'Second Trimester'),
-        ('Third', 'Third Trimester')
-    ], blank=True, null=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        unique_together = ('product', 'user')
-        ordering = ('-created_date',)
-    
-    def __str__(self):
-        return f'{self.user.username} rated {self.product.name} {self.rating}/5'
-
-
-class WishList(models.Model):
-    """User wishlist for products"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlist')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    added_date = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        unique_together = ('user', 'product')
-    
-    def __str__(self):
-        return f"{self.user.username}'s wishlist item: {self.product.name}"
-
-
-class Coupon(models.Model):
-    """Discount coupons"""
-    code = models.CharField(max_length=50, unique=True)
-    valid_from = models.DateTimeField()
-    valid_to = models.DateTimeField()
-    discount = models.IntegerField(help_text="Percentage discount")
-    active = models.BooleanField(default=True)
-    
-    # Trimester-specific coupons
-    applicable_trimester = models.CharField(max_length=20, choices=[
-        ('All', 'All Trimesters'),
-        ('First', 'First Trimester'),
-        ('Second', 'Second Trimester'),
-        ('Third', 'Third Trimester')
-    ], default='All')
-    
-    min_purchase_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    max_discount_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    
-    def __str__(self):
-        return self.code
-
-
-class NutritionPlan(models.Model):
-    """Nutrition plans - links diet plans to product recommendations"""
-    name = models.CharField(max_length=100)
-    trimester = models.CharField(max_length=20, choices=[
-        ('First', 'First Trimester'),
-        ('Second', 'Second Trimester'),
-        ('Third', 'Third Trimester')
-    ])
-    description = models.TextField()
-    
-    # Link to existing diet plans
-    related_diet_plan = models.ForeignKey(DietPlan, on_delete=models.SET_NULL, null=True, blank=True, 
-                                          related_name='product_recommendations')
-    
-    # Products recommended in this plan
-    recommended_products = models.ManyToManyField(Product, related_name='nutrition_plans')
-    
-    class Meta:
-        ordering = ('trimester', 'name')
-    
-    def __str__(self):
-        return f"{self.name} - {self.trimester}"
-
-
-class ShippingAddress(models.Model):
-    """User's shipping addresses"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shipping_addresses')
-    name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=20)
-    address_line1 = models.CharField(max_length=250)
-    address_line2 = models.CharField(max_length=250, blank=True, null=True)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    postal_code = models.CharField(max_length=20)
-    is_default = models.BooleanField(default=False)
-    
-    def __str__(self):
-        return f"{self.user.username}'s address: {self.name}, {self.city}"
-
-
-class ProductTrimesterBenefit(models.Model):
-    """Specific benefits of products for each trimester"""
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='trimester_benefits')
-    trimester = models.CharField(max_length=20, choices=[
-        ('First', 'First Trimester'),
-        ('Second', 'Second Trimester'),
-        ('Third', 'Third Trimester')
-    ])
-    benefit_description = models.TextField()
-    
-    class Meta:
-        unique_together = ('product', 'trimester')
-    
-    def __str__(self):
-        return f"{self.product.name} benefits for {self.trimester} Trimester"

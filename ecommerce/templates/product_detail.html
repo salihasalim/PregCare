@@ -1,360 +1,689 @@
+{%extends 'basee.html'%}
+{%block main1_block%}
+    <style>
+        /* Adjust image size */
+.product-img-card {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    position: relative;
+    max-height: 600px; /* Reduced height */
+    max-width: 600px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-{% extends "base.html" %}
-{% load static %}
+.product-img-card img {
+    width: 100%;
+    height: auto;
+    object-fit: contain; /* Ensures the image fits without cropping */
+}
 
-{% block title %}{{ product.name }} | MomNourish{% endblock %}
+/* Adjust button size */
+.btn-add-cart, .btn-buy-now {
+    background-color: var(--primary);
+    border: none;
+    border-radius: 50px;
+    padding: 0.75rem 1.5rem; /* Reduced padding */
+    font-weight: 600;
+    transition: all 0.3s;
+    flex-grow: 1;
+    font-size: 1rem; /* Adjusted font size */
+}
 
-{% block extra_css %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
-{% endblock %}
+.btn-add-cart:hover, .btn-buy-now:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(142, 68, 173, 0.2);
+}
+
+        :root {
+            --primary: #8e44ad;
+            --primary-light: #a569bd;
+            --secondary: #27ae60;
+            --accent: #f39c12;
+            --text: #2c3e50;
+            --light-bg: #f8f9fa;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            color: var(--text);
+            background-color: #f9f7fc;
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-item a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .product-img-card {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+            height: 450px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-img-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-organic {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .badge-gluten-free {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .badge-dairy-free {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .badge-discount {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .product-badges {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .product-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .price-container {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 1.5rem;
+        }
+
+        .current-price {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .original-price {
+            font-size: 1.3rem;
+            text-decoration: line-through;
+            color: #95a5a6;
+            margin-left: 1rem;
+        }
+
+        .discount-percent {
+            font-size: 1rem;
+            background-color: #e74c3c;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            margin-left: 1rem;
+        }
+
+        .stock-status {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .in-stock {
+            color: var(--secondary);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+        }
+
+        .section-content {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #34495e;
+            margin-bottom: 2rem;
+        }
+
+        .trimester-info {
+            background-color: #d6eaf8;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .trimester-info h6 {
+            color: #2980b9;
+            font-weight: 600;
+        }
+
+        .trimester-info p {
+            margin-bottom: 0;
+        }
+
+        .nutrient-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: #edf7ed;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+
+        .nutrient-badge i {
+            margin-right: 0.5rem;
+        }
+
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .nutrition-item {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
+        }
+
+        .nutrition-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .nutrition-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .nutrition-name {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin: 0;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            width: 140px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .quantity-btn {
+            border: none;
+            background: transparent;
+            font-size: 1.2rem;
+            font-weight: bold;
+            width: 40px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quantity-btn:hover {
+            background-color: #f1f1f1;
+        }
+
+        .quantity-input {
+            width: 60px;
+            border: none;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .quantity-input:focus {
+            outline: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-add-cart {
+            background-color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex-grow: 1;
+        }
+
+        .btn-add-cart:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(142, 68, 173, 0.2);
+        }
+
+        .btn-buy-now {
+            background-color: var(--secondary);
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-buy-now:hover {
+            background-color: #2ecc71;
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(39, 174, 96, 0.2);
+        }
+
+        .info-tabs {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+
+        .nav-tabs {
+            border: none;
+            background-color: #f8f9fa;
+            padding: 0.5rem 0.5rem 0;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: #7f8c8d;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary);
+            background-color: white;
+        }
+
+        .tab-content {
+            padding: 2rem;
+        }
+
+        .dietary-info {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .dietary-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 500;
+            gap: 0.5rem;
+        }
+
+        .dietary-badge i {
+            font-size: 1.2rem;
+        }
+
+        .dietary-badge.yes {
+            background-color: #edf7ed;
+            color: var(--secondary);
+        }
+
+        .dietary-badge.no {
+            background-color: #ffecec;
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .product-title {
+                font-size: 1.8rem;
+            }
+
+            .current-price {
+                font-size: 1.8rem;
+            }
+
+            .nutrition-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
 
 
-{% block content %}
-<div class="container">
-    <!-- Breadcrumbs -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'ecommerce:product_list' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
-            <li class="breadcrumb-item active">{{ product.name }}</li>
-        </ol>
-    </nav>
-    
-    <div class="row mb-5">
-        <!-- Product Image -->
-        <div class="col-md-5 mb-4">
-            <div class="card">
-                {% if product.image %}
-                    <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
-                {% else %}
-                    <img src="" class="card-img-top img-fluid" alt="No image">
-                {% endif %}
-                
-                <!-- Product badges -->
-                <div class="product-badges">
-                    {% if product.is_organic %}
-                        <span class="badge bg-success">Organic</span>
-                    {% endif %}
-                    {% if product.is_gluten_free %}
-                        <span class="badge bg-warning">Gluten-Free</span>
-                    {% endif %}
-                    {% if product.is_dairy_free %}
-                        <span class="badge bg-info">Dairy-Free</span>
-                    {% endif %}
+
+ 
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item"><a href="#">{{ product.category }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4">
+            <!-- Product Image -->
+            <div class="col-lg-6 mb-4">
+                {% load static%}
+                <div class="product-img-card">
+                    <img src="{{product.image.url}}" alt="{{ product.name }}">
+                    <div class="product-badges">
+                        {% if product.is_organic %}
+                        <span class="badge badge-organic">Organic</span>
+                        {% endif %}
+                        {% if product.is_gluten_free %}
+                        <span class="badge badge-gluten-free">Gluten-Free</span>
+                        {% endif %}
+                        {% if product.is_dairy_free %}
+                        <span class="badge badge-dairy-free">Dairy-Free</span>
+                        {% endif %}
+                        {% if product.discount_price %}
+                        <span class="badge badge-discount">{{ product.get_discount_percentage }}% OFF</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <form action="{% url 'ecommerce:add-to-cart' pk=product.id %}" method="post" >
+
+            {%csrf_token%}
+
+            <!-- Product Details -->
+            <div class="col-lg-6">
+                <h1 class="product-title">{{ product.name }}</h1>
+
+                <div class="price-container">
                     {% if product.discount_price %}
-                        <span class="badge bg-danger">{{ product.get_discount_percentage }}% OFF</span>
+                    <span class="current-price">₹{{ product.discount_price }}</span>
+                    <span class="original-price">₹{{ product.price }}</span>
+                    <span class="discount-percent">{{ product.get_discount_percentage }}% OFF</span>
+                    {% else %}
+                    <span class="current-price">₹{{ product.price }}</span>
                     {% endif %}
                 </div>
+
+                {% if product.available %}
+                <div class="stock-status">
+                    <i class="fas fa-check-circle in-stock"></i>
+                    <span class="in-stock">In Stock ({{ product.stock }} available)</span>
+                </div>
+                {% else %}
+                <div class="stock-status">
+                    <i class="fas fa-times-circle text-danger"></i>
+                    <span class="text-danger">Out of Stock</span>
+                </div>
+                {% endif %}
+
+                <div class="section-content mb-4">
+                    {{ product.description }}
+                </div>
+
+                <div class="trimester-info">
+                    <h6><i class="fas fa-baby-carriage me-2"></i>Recommended for:</h6>
+                    <p>{{ product.get_recommended_trimesters_display }}</p>
+                </div>
+
+                <!-- Dietary Information -->
+                <h6 class="section-title">Dietary Information</h6>
+                <div class="dietary-info">
+                    {% if product.is_organic %}
+                    <span class="dietary-badge yes">
+                        <i class="fas fa-check-circle"></i> Organic
+                    </span>
+                    {% else %}
+                    <span class="dietary-badge no">
+                        <i class="fas fa-times-circle"></i> Not Organic
+                    </span>
+                    {% endif %}
+
+                    {% if product.is_gluten_free %}
+                    <span class="dietary-badge yes">
+                        <i class="fas fa-check-circle"></i> Gluten-Free
+                    </span>
+                    {% else %}
+                    <span class="dietary-badge no">
+                        <i class="fas fa-times-circle"></i> Contains Gluten
+                    </span>
+                    {% endif %}
+
+                    {% if product.is_dairy_free %}
+                    <span class="dietary-badge yes">
+                        <i class="fas fa-check-circle"></i> Dairy-Free
+                    </span>
+                    {% else %}
+                    <span class="dietary-badge no">
+                        <i class="fas fa-times-circle"></i> Contains Dairy
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- Quantity Selector -->
+                <h6 class="section-title">Quantity</h6>
+                <div class="quantity-selector">
+                    <button class="quantity-btn" onclick="decrementQuantity()">-</button>
+                    <input type="number" class="quantity-input" value="1" min="1" max="{{ product.stock }}" id="quantity" name="quantity">
+                    <button class="quantity-btn" onclick="incrementQuantity()">+</button>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-add-cart" type="submit">
+                        <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                    </button>
+                    <button class="btn btn-buy-now">
+                        <i class="fas fa-bolt me-2"></i>Buy Now
+                    </button>
+                </div>
             </div>
+            </form>
         </div>
-        
-        <!-- Product Info -->
-        <div class="col-md-7">
-            <h1 class="mb-3">{{ product.name }}</h1>
-            
-            <!-- Ratings -->
-            <div class="d-flex align-items-center mb-3">
-                <div class="rateyo-readonly" data-rateyo-rating="{{ avg_rating|default:'0' }}" data-rateyo-read-only="true"></div>
-                <span class="ms-2">
-                    {{ avg_rating|default:'0'|floatformat:1 }}/5
-                    ({{ reviews.count }} review{{ reviews.count|pluralize }})
-                </span>
-            </div>
-            
-            <!-- Price Info -->
-            <div class="mb-4">
-                {% if product.discount_price %}
-                    <span class="h3 text-danger me-2">${{ product.discount_price }}</span>
-                    <span class="h5 text-muted text-decoration-line-through">${{ product.price }}</span>
-                    <span class="badge bg-danger">{{ product.get_discount_percentage }}% OFF</span>
-                {% else %}
-                    <span class="h3">${{ product.price }}</span>
-                {% endif %}
-            </div>
-            
-            <!-- Stock Status -->
-            <div class="mb-3">
-                {% if product.stock > 0 %}
-                    <p class="text-success mb-0">
-                        <i class="fas fa-check-circle"></i> In Stock ({{ product.stock }} available)
-                    </p>
-                {% else %}
-                    <p class="text-danger mb-0">
-                        <i class="fas fa-times-circle"></i> Out of Stock
-                    </p>
-                {% endif %}
-            </div>
-            
-            <!-- Product Description -->
-            <div class="mb-4">
-                <h5>Description</h5>
-                <p>{{ product.description }}</p>
-            </div>
-            
-            <!-- Recommended Trimesters -->
-            <div class="mb-4">
-                <h5>Recommended For</h5>
-                {% if product.recommended_trimesters == 'All' %}
-                    <p><i class="fas fa-check text-success"></i> Suitable for all trimesters</p>
-                {% else %}
-                    <p>
-                        <i class="fas fa-check text-success"></i> 
-                        {{ product.recommended_trimesters }} Trimester
-                    </p>
-                {% endif %}
-                
-                {% if user_trimester and trimester_benefit %}
-                    <div class="alert alert-info mt-2">
-                        <h6 class="mb-1"><i class="fas fa-info-circle"></i> Benefits for your trimester ({{ user_trimester }})</h6>
-                        <p class="mb-0">{{ trimester_benefit.benefit_description }}</p>
-                    </div>
-                {% endif %}
-            </div>
-            
-            <!-- Key Nutrients -->
-            {% if product.key_nutrients.all %}
-                <div class="mb-4">
-                    <h5>Key Nutrients</h5>
-                    <div class="row">
-                        {% for nutrient in product.key_nutrients.all %}
-                            <div class="col-md-6 mb-1">
-                                <i class="fas fa-seedling text-success"></i> {{ nutrient.name }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-            
-            <!-- Nutrition Facts -->
-            <div class="mb-4">
-                <h5>Nutrition Facts (per serving)</h5>
-                <div class="row">
-                    <div class="col-6 col-md-3 mb-2">
+
+        <!-- Product Information Tabs -->
+        <div class="info-tabs mt-5">
+            <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="nutrition-tab" data-bs-toggle="tab" data-bs-target="#nutrition" type="button" role="tab">Nutrition</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="benefits-tab" data-bs-toggle="tab" data-bs-target="#benefits" type="button" role="tab">Benefits</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="usage-tab" data-bs-toggle="tab" data-bs-target="#usage" type="button" role="tab">How to Use</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">Reviews</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="productTabsContent">
+                <div class="tab-pane fade show active" id="nutrition" role="tabpanel" aria-labelledby="nutrition-tab">
+                    <h5 class="section-title">Nutritional Information</h5>
+                    <div class="nutrition-grid">
                         <div class="nutrition-item">
-                            <h6 class="mb-0">Calories</h6>
-                            <p class="mb-0">{{ product.calories }}</p>
+                            <div class="nutrition-value">{{ product.calories }}</div>
+                            <p class="nutrition-name">Calories (kcal)</p>
                         </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-2">
                         <div class="nutrition-item">
-                            <h6 class="mb-0">Protein</h6>
-                            <p class="mb-0">{{ product.protein }}g</p>
+                            <div class="nutrition-value">{{ product.protein }}g</div>
+                            <p class="nutrition-name">Protein</p>
                         </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-2">
                         <div class="nutrition-item">
-                            <h6 class="mb-0">Carbs</h6>
-                            <p class="mb-0">{{ product.carbohydrates }}g</p>
+                            <div class="nutrition-value">{{ product.carbohydrates }}g</div>
+                            <p class="nutrition-name">Carbohydrates</p>
                         </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-2">
                         <div class="nutrition-item">
-                            <h6 class="mb-0">Fats</h6>
-                            <p class="mb-0">{{ product.fats }}g</p>
+                            <div class="nutrition-value">{{ product.fats }}g</div>
+                            <p class="nutrition-name">Fats</p>
                         </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-2">
                         <div class="nutrition-item">
-                            <h6 class="mb-0">Fiber</h6>
-                            <p class="mb-0">{{ product.fiber }}g</p>
+                            <div class="nutrition-value">{{ product.fiber }}g</div>
+                            <p class="nutrition-name">Fiber</p>
                         </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-2">
                         <div class="nutrition-item">
-                            <h6 class="mb-0">Iron</h6>
-                            <p class="mb-0">{{ product.iron }}mg</p>
+                            <div class="nutrition-value">{{ product.iron }}mg</div>
+                            <p class="nutrition-name">Iron</p>
                         </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-2">
                         <div class="nutrition-item">
-                            <h6 class="mb-0">Calcium</h6>
-                            <p class="mb-0">{{ product.calcium }}mg</p>
+                            <div class="nutrition-value">{{ product.calcium }}mg</div>
+                            <p class="nutrition-name">Calcium</p>
                         </div>
-                    </div>
-                    <div class="col-6 col-md-3 mb-2">
                         <div class="nutrition-item">
-                            <h6 class="mb-0">Folate</h6>
-                            <p class="mb-0">{{ product.folate }}mcg</p>
+                            <div class="nutrition-value">{{ product.folate }}µg</div>
+                            <p class="nutrition-name">Folate</p>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Add to Cart Form -->
-            {% if product.stock > 0 %}
-                <form action="{% url 'ecommerce:cart_add' product.id %}" method="post" class="mb-3">
-                    {% csrf_token %}
-                    <div class="row g-2">
-                        <div class="col-sm-3">
-                            <div class="input-group">
-                                <button type="button" class="btn btn-outline-secondary quantity-btn" data-action="decrease">-</button>
-                                <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control text-center" id="quantity">
-                                <button type="button" class="btn btn-outline-secondary quantity-btn" data-action="increase">+</button>
-                            </div>
-                        </div>
-                        <div class="col-sm-9">
-                            <div class="d-flex">
-                                <button type="submit" class="btn btn-primary flex-grow-1 me-2">
-                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
-                                </button>
-                                <button type="submit" name="redirect_to_cart" value="1" class="btn btn-success">
-                                    <i class="fas fa-arrow-right me-1"></i> Buy Now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            {% else %}
-                <div class="alert alert-warning">
-                    <i class="fas fa-exclamation-triangle me-2"></i> This product is currently out of stock.
+                <div class="tab-pane fade" id="benefits" role="tabpanel" aria-labelledby="benefits-tab">
+                    <h5 class="section-title">Health Benefits</h5>
+                    <p>Detailed information about the health benefits of this product during pregnancy.</p>
                 </div>
-                <button class="btn btn-outline-primary" disabled>
-                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
-                </button>
-            {% endif %}
-            
-            <!-- Additional Product Info -->
-            <div class="mt-4">
-                <div class="card">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs" id="product-tabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="usage-tab" data-bs-toggle="tab" data-bs-target="#usage" type="button" role="tab" aria-controls="usage" aria-selected="true">Usage</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="benefits-tab" data-bs-toggle="tab" data-bs-target="#benefits" type="button" role="tab" aria-controls="benefits" aria-selected="false">Benefits</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="precautions-tab" data-bs-toggle="tab" data-bs-target="#precautions" type="button" role="tab" aria-controls="precautions" aria-selected="false">Precautions</button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content" id="product-tab-content">
-                            <div class="tab-pane fade show active" id="usage" role="tabpanel" aria-labelledby="usage-tab">
-                                <p>{{ product.usage_instructions|default:"No usage instructions available." }}</p>
-                            </div>
-                            <div class="tab-pane fade" id="benefits" role="tabpanel" aria-labelledby="benefits-tab">
-                                <p>{{ product.benefits|default:"No specific benefits listed." }}</p>
-                            </div>
-                            <div class="tab-pane fade" id="precautions" role="tabpanel" aria-labelledby="precautions-tab">
-                                <p>{{ product.precautions|default:"No specific precautions listed." }}</p>
-                                <div class="alert alert-warning mt-2">
-                                    <i class="fas fa-exclamation-triangle me-2"></i> Always consult with your healthcare provider before adding new supplements to your pregnancy diet.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="tab-pane fade" id="usage" role="tabpanel" aria-labelledby="usage-tab">
+                    <h5 class="section-title">How to Use</h5>
+                    <p>Instructions on how to use or consume this product for maximum benefits.</p>
+                </div>
+                <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                    <h5 class="section-title">Customer Reviews</h5>
+                    <p>Reviews from other mothers who have tried this product.</p>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Reviews Section -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <h3 class="mb-4">Customer Reviews</h3>
-            
-            <!-- Leave a Review -->
-            {% if user.is_authenticated %}
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">Write a Review</h5>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="mb-3">MomNourish</h5>
+                    <p>Nourishing mothers for healthier pregnancies and babies. Our products are specially formulated to support maternal health during pregnancy and beyond.</p>
+                </div>
+                <div class="col-lg-2">
+                    <h6 class="mb-3">Shop</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50">All Products</a></li>
+                        <li><a href="#" class="text-white-50">First Trimester</a></li>
+                        <li><a href="#" class="text-white-50">Second Trimester</a></li>
+                        <li><a href="#" class="text-white-50">Third Trimester</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h6 class="mb-3">Company</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50">About Us</a></li>
+                        <li><a href="#" class="text-white-50">Contact</a></li>
+                        <li><a href="#" class="text-white-50">Blog</a></li>
+                        <li><a href="#" class="text-white-50">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h6 class="mb-3">Newsletter</h6>
+                    <p class="text-white-50">Subscribe to get special offers, health tips, and more.</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Your email">
+                        <button class="btn btn-primary" type="button">Subscribe</button>
                     </div>
-                    <div class="card-body">
-                        <form method="post" action="{% url 'ecommerce:add_product_review' product.id %}">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label for="rating" class="form-label">Your Rating</label>
-                                <div id="rateYo" data-rateyo-rating="0"></div>
-                                <input type="hidden" name="rating" id="rating" value="0">
-                            </div>
-                            <div class="mb-3">
-                                <label for="review_text" class="form-label">Your Review</label>
-                                <textarea class="form-control" id="review_text" name="review_text" rows="3" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit Review</button>
-                        </form>
-                    </div>
                 </div>
-            {% else %}
-                <div class="alert alert-info mb-4">
-                    <i class="fas fa-info-circle me-2"></i> Please <a href="{% url 'login' %}?next={{ request.path }}">log in</a> to leave a review.
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-md-0">© 2025 MomNourish. All rights reserved.</p>
                 </div>
-            {% endif %}
-            
-            <!-- Review List -->
-            {% if reviews %}
-                <div class="reviews-list">
-                    {% for review in reviews %}
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <h6 class="mb-0">{{ review.user.get_full_name|default:review.user.username }}</h6>
-                                    <small class="text-muted">{{ review.created_at|date:"F d, Y" }}</small>
-                                </div>
-                                <div class="mb-2">
-                                    <div class="rateyo-readonly" data-rateyo-rating="{{ review.rating }}" data-rateyo-read-only="true" data-rateyo-star-width="16px"></div>
-                                </div>
-                                <p class="mb-0">{{ review.review_text }}</p>
-                            </div>
-                        </div>
-                    {% endfor %}
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-pinterest-p"></i></a>
                 </div>
-            {% else %}
-                <div class="alert alert-light">
-                    <i class="fas fa-comment-slash me-2"></i> No reviews yet. Be the first to review this product!
-                </div>
-            {% endif %}
+            </div>
         </div>
-    </div>
-    
-    <!-- Related Products -->
-    
-{% endblock %}
+    </footer>
 
-{% block extra_js %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Initialize rating plugin for reviews
-        $(".rateyo-readonly").each(function() {
-            $(this).rateYo({
-                rating: $(this).data("rateyo-rating"),
-                readOnly: true,
-                starWidth: "18px"
-            });
-        });
-        
-        // Initialize rating plugin for review form
-        $("#rateYo").rateYo({
-            fullStar: true,
-            starWidth: "24px",
-            onSet: function(rating) {
-                $("#rating").val(rating);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function incrementQuantity() {
+
+            const input = document.getElementById('quantity');
+            const maxStock = parseInt(input.dataset.maxStock);
+            const currentValue = parseInt(input.value);
+            if (currentValue < maxStock) {
+                input.value = currentValue + 1;
             }
-        });
-        
-        // Quantity controls
-        $(".quantity-btn").on("click", function() {
-            const input = $("#quantity");
-            const action = $(this).data("action");
-            const currentVal = parseInt(input.val());
-            const max = parseInt(input.attr("max"));
-            
-            if (action === "decrease" && currentVal > 1) {
-                input.val(currentVal - 1);
-            } else if (action === "increase" && currentVal < max) {
-                input.val(currentVal + 1);
+        }
+
+        function decrementQuantity() {
+            const input = document.getElementById('quantity');
+            const currentValue = parseInt(input.value);
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
             }
-        });
-    });
-</script>
-{% endblock %}
-
-
-
-
-
-
-
+        }
+    </script>
+    {%endblock%}

@@ -441,6 +441,22 @@ class AboutusView(View):
     def get(self,request,*args,**kwargs):
 
         return render(request,self.template_name)
+    
+
+from .models import ExerciseYoga
+
+class ExerciseYogaListView(ListView):
+    model = ExerciseYoga
+    template_name = 'exercise_yoga_list.html'  
+    context_object_name = 'exercises'  
+
+    def get_queryset(self):
+        trimester = self.request.GET.get('trimester')
+        
+        if trimester:
+            return ExerciseYoga.objects.filter(trimester=trimester)
+        return ExerciseYoga.objects.all()
+
 
 
 class LogOutView(View):

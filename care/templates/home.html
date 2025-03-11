@@ -129,20 +129,20 @@
 
     <div class="features">
         <div class="feature-box">
-            <h3>Pregnancy Profile</h3>
-            <p>Want to update your profile information?</p>
-            <a href="{% url 'profile' %}" class="cta-button">Edit Profile</a>
+            <h3> BY PRODUCTS</h3>
+            <p>Help users stay organized and maintain their health regimen</p>
+            <a href="{% url 'ecommerce:product_list' %}" class="cta-button">BUY-NOW</a>
         </div>
-
+        
         <div class="feature-box">
             <h3>Books for Pregnancy Care</h3>
             <p>Expert advice on health, nutrition, and wellness for every stage of pregnancy.</p>
             <a href="{% url 'explore_books' %}" class="cta-button">Explore Books</a>
         </div>
         <div class="feature-box">
-            <h3>Exercise Plans</h3>
-            <p>Safe and effective exercise videos customized to your trimester.</p>
-            <a href="{% url 'exercise_plan' %}" class="cta-button">View Plans</a>
+            <h3>yoga Plans</h3>
+            <p>Safe and effective yoga customized to your trimester.</p>
+            <a href="{% url 'exercise_yoga_list' %}" class="cta-button">View Plans</a>
         </div>
     </div>
 
@@ -166,12 +166,14 @@
             <p>Help users stay organized and maintain their health regimen</p>
             <a href="{% url 'diet_plans' %}" class="cta-button">diet-plan</a>
         </div>
-
         <div class="feature-box">
-            <h3> BY PRODUCTS</h3>
-            <p>Help users stay organized and maintain their health regimen</p>
-            <a href="{% url 'ecommerce:product_list' %}" class="cta-button">BUY-NOW</a>
+            <h3>Pregnancy Profile</h3>
+            <p>Want to update your profile information?</p>
+            <a href="{% url 'profile' %}" class="cta-button">Edit Profile</a>
         </div>
+
+
+        
     </div>
 </div>
 

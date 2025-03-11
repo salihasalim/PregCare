@@ -41,6 +41,8 @@ urlpatterns = [
     path('pregnancytips',views.PregnancyTipsView.as_view(),name='pregnancytip'),
     # path('baby-kick-tracking/',views.BabyKickTrackingView.as_view(), name='baby_kick_tracking'),
      path('diet-plans/', views.DietPlanListView.as_view(), name='diet_plans'),
+     path('exercise-yoga/',views.ExerciseYogaListView.as_view(), name='exercise_yoga_list'),
+
      path('aboutus',views.AboutusView.as_view(),name='aboutus'),
      path('logout/',views.LogOutView.as_view(),name='logout')
 

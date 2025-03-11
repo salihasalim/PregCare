@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ExercisePlan,Book,PregnancyTip,DietPlan
+from .models import ExercisePlan,Book,PregnancyTip,DietPlan,ExerciseYoga
 class ExerciseVideoAdmin(admin.ModelAdmin):
     list_display = ('title', 'trimester', 'description')  # Display these fields in the admin list view
     search_fields = ('title', 'description')  # Allow searching by title or description
@@ -15,6 +15,7 @@ admin.site.register(ExercisePlan, ExerciseVideoAdmin)
 admin.site.register(Book)
 admin.site.register(PregnancyTip,PregnancyTipAdmin)
 admin.site.register(DietPlan)
+admin.site.register(ExerciseYoga)
 
 
 
