@@ -195,7 +195,7 @@ class PlaceOrderView(View):
                 print(order_object.rzp_order_id)
                 context = {
                     'key_id':RZP_KEY_ID,
-                    'amount':order_object.order_total()*100,
+                    'amount':order_object.order_total(),
                     'order_id':order_object.rzp_order_id
 
                 }
@@ -360,6 +360,8 @@ class OrderSummaryView(View):
 
 
 
+
+# chatbot
 
 
 

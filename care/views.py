@@ -18,6 +18,13 @@ from django.contrib.auth import authenticate,login,logout
 
 from django.contrib.auth.decorators import login_required
 
+from care.decorators import signin_required
+
+from django.utils.decorators import method_decorator
+
+
+from django.views.decorators.cache import never_cache
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.core.mail import send_mail
@@ -46,6 +53,12 @@ class IndexPageView(View):
 
      return render(request,self.template_name)
 
+
+
+
+
+
+
 class frontPageView(View):
 
     template_name='frontpage.html'
@@ -60,6 +73,10 @@ from django.contrib.auth.models import User
 from .models import UserProfile
 import datetime
 
+
+
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class HomePageView(View):
     template_name = 'home.html'
 
@@ -92,6 +109,7 @@ class HomePageView(View):
             return render(request, self.template_name, {'error': 'Profile or LMP not set'})
 
 
+
 class signUpView(View):
 
     template_name="Signup.html"
@@ -116,7 +134,6 @@ class signUpView(View):
         
         return render(request,self.template_name,{"form":form_instance})
     
-
 
 class SignInView(View):
 
@@ -157,7 +174,9 @@ class SignInView(View):
         return render(request,self.template_name,{"form":form_instance})
 
 
-@login_required
+
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 def user_profile(request):
 
     profile = request.user.userprofile
@@ -184,6 +203,8 @@ def user_profile(request):
 # EXERCISE PLAN
 
 
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class ExercisePlanView(LoginRequiredMixin, ListView):
 
     model = ExercisePlan
@@ -209,12 +230,18 @@ class ExercisePlanView(LoginRequiredMixin, ListView):
 
 # for book
 
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 def explore_books(request):
 
     books = Book.objects.all()  
 
     return render(request, 'explore_books.html', {'books': books})
 
+
+
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 
 def download_book(request,book_id):
 
@@ -233,6 +260,8 @@ def download_book(request,book_id):
 
 # for rfeminder
 
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class AddReminderView(View):
 
     template_name = 'add_reminder.html'
@@ -283,6 +312,8 @@ class AddReminderView(View):
 
 
 
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class ReminderListView(View):
 
     template_name = 'reminder_list.html'
@@ -295,6 +326,8 @@ class ReminderListView(View):
         return render(request, self.template_name, {'reminders': reminders})
 
 
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class MarkAsCompletedView(View):
     
     def get(self, request, reminder_id, *args, **kwargs):
@@ -312,6 +345,8 @@ class MarkAsCompletedView(View):
 # for pregnancy tips
 
 
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 def get_current_week_of_pregnancy(lmp_date):
 
     if lmp_date:
@@ -325,6 +360,8 @@ def get_current_week_of_pregnancy(lmp_date):
         return current_week
     return None
 
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class PregnancyTipsView(View):
     template_name = 'pregnancy_tips.html'
     
@@ -405,6 +442,8 @@ class PregnancyTipsView(View):
 
 # diet plan
 
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class DietPlanListView(ListView):
     model = DietPlan
     template_name = 'diet_plans.html'  # Your template file
@@ -436,6 +475,9 @@ class DietPlanListView(ListView):
         return context
 
 
+
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class AboutusView(View):
     template_name='aboutus.html'
     def get(self,request,*args,**kwargs):
@@ -445,6 +487,10 @@ class AboutusView(View):
 
 from .models import ExerciseYoga
 
+
+
+decs=[signin_required,never_cache]
+@method_decorator(decs,name="dispatch")
 class ExerciseYogaListView(ListView):
     model = ExerciseYoga
     template_name = 'exercise_yoga_list.html'  
@@ -458,10 +504,112 @@ class ExerciseYogaListView(ListView):
         return ExerciseYoga.objects.all()
 
 
-
 class LogOutView(View):
 
     def get (self,request,*args,**kwargs):
 
         logout(request)
         return redirect("frontpage")
+
+
+
+
+# chatbot
+
+import re
+import groq
+    
+client =groq.Client(api_key="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")
+
+
+def get_groq_response(user_input):
+    """
+    Communicate with the GROQ chatbot to get a response based on user input.
+    """
+    system_prompt = {
+        "role": "system",
+        "content": "You are a helpful assistant. You reply with very short answers ."
+    }
+
+    chat_history = [system_prompt]
+
+    # Append user input to the chat history
+    chat_history.append({"role": "user", "content": user_input})
+
+    # Get response from GROQ API
+    chat_completion = client.chat.completions.create(
+        model="llama3-70b-8192",
+        messages=chat_history,
+        max_tokens=100,
+        temperature=1.2
+    )
+
+    response = chat_completion.choices[0].message.content
+    print(response)
+    # Format response (convert bold to <b>bold</b>)
+    response = re.sub(r'\\(.?)\\*', r'<b>\1</b>', response)
+
+    return response
+
+
+import json
+from django.http import JsonResponse
+
+class ChatbotView(View):
+    def get(self, request):
+        return render(request, "chatbot.html")
+    def post(self, request): 
+        try:
+            body = json.loads(request.body)
+            user_input = body.get('userInput')
+        except json.JSONDecodeError as e:
+            return JsonResponse({"error": "Invalid JSON format."})
+    
+        if not user_input:  # If user_input is None or empty
+            print("no")
+            return JsonResponse({"error": "No user input provided."})  
+        
+        print("User Input:", user_input)
+        
+        static_responses = {
+            "hi": "Hello! How can I assist you today?",
+            "hello": "Hi there! How can I help you?",
+            "how are you": "I'm just a chatbot, but I'm doing great! How about you?",
+            "bye": "Goodbye! Take care.",
+            "whats up": "Not much, just here to help you with  queries. How can I help you today?",
+        }
+
+        lower_input = user_input.lower().strip()
+        if lower_input in static_responses:
+            print(static_responses[lower_input])
+            return JsonResponse({'response': static_responses[lower_input]})
+        
+        try:
+            print("Processing via GROQ")
+            data = get_groq_response(user_input)
+            print(data)
+            treatment_list = data.split('\n')
+            return JsonResponse({'response': treatment_list})
+        except Exception as e:
+            return JsonResponse({"error": f"Failed to get GROQ response: {str(e)}"})
+
+
+
+
+# from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt  # ✅ Add this line
+# import json
+# from .chatbotlogic import get_bot_response 
+# # Chatbot response view
+# @csrf_exempt
+# def chatbot_response(request):
+#     if request.method == "POST":
+#         user_input = request.POST.get('userInput', '')
+#         bot_response = get_bot_response(user_input)  # Get AI response
+#         return JsonResponse({"response": bot_response})
+
+#     return JsonResponse({"response": "Invalid request"})
+
+# # Render chat page
+# def chatbot_page(request):
+#     return render(request, 'chatbot.html')

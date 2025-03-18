@@ -1,0 +1,240 @@
+{% load static %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #6a11cb, #53cd59);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        margin: 0;
+    }
+    
+    .chat-container::-webkit-scrollbar {
+        width: 5px;
+    }
+    
+    .chat-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 5px;
+    }
+    
+    .chat-box {
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        transition: all 0.3s ease;
+    }
+    
+    .message-bubble {
+        transition: all 0.3s ease;
+    }
+    
+    .message-bubble:hover {
+        transform: translateY(-2px);
+    }
+    
+    .send-button {
+        transition: all 0.3s ease;
+    }
+    
+    .send-button:hover {
+        transform: scale(1.05);
+    }
+    
+    @media (max-width: 768px) {
+        .chat-box {
+            width: 95% !important;
+            margin: 0 auto;
+        }
+    }
+</style>
+
+<div class="flex items-center justify-center p-4 sm:p-8 w-full">
+    <div class="chat-box bg-white w-full max-w-4xl rounded-2xl overflow-hidden">
+        <div class="bg-gradient-to-r from-purple-600 to-blue-500 p-4 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold">AI Assistant</h2>
+                    <p class="text-xs sm:text-sm text-purple-100 mt-1">Your Intelligent Guide</p>
+                </div>
+                <div class="flex space-x-2">
+                    <div class="h-3 w-3 rounded-full bg-red-400"></div>
+                    <div class="h-3 w-3 rounded-full bg-yellow-400"></div>
+                    <div class="h-3 w-3 rounded-full bg-green-400"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="chatBox" class="chat-container p-4 space-y-4 h-80 sm:h-96 overflow-y-auto bg-gradient-to-b from-purple-50 to-blue-50">
+            <div class="flex items-start mb-4 animate-fade-in">
+                <div class="flex-shrink-0 mr-3">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white">
+                        <i class="fas fa-robot text-sm"></i>
+                    </div>
+                </div>
+                <div class="message-bubble bg-white p-3 rounded-xl max-w-[80%] shadow-md border-l-4 border-purple-500">
+                    <p class="text-gray-700">
+                        Welcome! I'm here to help you with any questions.
+                    </p>
+                    <span id="assistant-timestamp" class="text-xs text-gray-400 block mt-1">Assistant • Just now</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t p-3 bg-gray-50 flex space-x-2 items-center">
+            <input type="text" id="userInput" name="userInput" placeholder="Ask me anything..." class="flex-grow p-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-sm">
+            <button onclick="sendMessage()" class="send-button bg-gradient-to-r from-purple-600 to-blue-500 text-white p-3 rounded-full hover:opacity-90 transition duration-300" id="formSubmit">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // Ensure the DOM content is fully loaded before running the script
+    window.addEventListener('DOMContentLoaded', () => {
+        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const timestampElement = document.getElementById('assistant-timestamp');
+        timestampElement.textContent = `Assistant • ${currentTime}`; // Corrected template literals
+    });
+
+    // Speech synthesis to read the input text
+    function speakInput(text) {
+        if (!window.speechSynthesis) return;
+
+        window.speechSynthesis.cancel();
+        const speech = new SpeechSynthesisUtterance(text);
+        speech.lang = 'en-US';
+
+        try {
+            window.speechSynthesis.speak(speech);
+        } catch (err) {
+            console.error('Speech error:', err);
+        }
+    }
+
+    // Automatically speak a dummy utterance when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        const dummyUtterance = new SpeechSynthesisUtterance('');
+        window.speechSynthesis.speak(dummyUtterance);
+    });
+
+    // Send message function
+    function sendMessage() {
+        const input = document.getElementById('userInput');
+        const chatBox = document.getElementById('chatBox');
+        if (input.value.trim() === '') return; // Avoid sending empty messages
+
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.className = 'flex justify-end mb-4';
+        const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        userMessageDiv.innerHTML = `
+            <div class="bg-gray-800 text-white p-3 rounded-lg max-w-[80%] shadow-sm">
+                <p>${input.value}</p>
+                <span class="text-xs text-gray-300 block mt-1">You • ${currentTime}</span>
+            </div>
+        `;
+        chatBox.appendChild(userMessageDiv);
+
+        // Send message to the backend (make sure '/chatbot/' is correct)
+        fetch('/chatbot/', {  
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'  // Make sure this is rendered in the template
+            },
+            body: JSON.stringify({ userInput: input.value })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const botMessageDiv = document.createElement('div');
+            botMessageDiv.className = 'flex items-start mb-4';
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            botMessageDiv.innerHTML = `
+                <div class="bg-white p-3 rounded-lg max-w-[80%] shadow-sm border border-gray-200">
+                    <p class="text-gray-700" id="output">${data.response}</p>
+                    <span class="text-xs text-gray-400 block mt-1">Assistant • ${currentTime}</span>
+                </div>`;
+            chatBox.appendChild(botMessageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
+            speakInput(data.response); // Use speech synthesis to read bot response
+        })
+        .catch(error => console.error('Error:', error));
+
+        // Reset the input field
+        input.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Send message on 'Enter' key press
+    document.getElementById('userInput').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            sendMessage(); // Trigger the sendMessage function on Enter key press
+        }
+    });
+
+    // Optional: Function to speak the message (in case you want this feature)
+    function speakMessage(msg) {
+        const message = new SpeechSynthesisUtterance(msg);
+        window.speechSynthesis.speak(message);
+    }
+
+    // Speech recognition to capture voice input
+    var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.continuous = true;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = function(event) {
+        var result = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+        console.log("Recognized:", result);
+        var inactivityTimer = null;
+        const inputField = document.getElementById("userInput");
+
+        if (result.startsWith("alexa")) {  
+            // Remove 'alexa' from the recognized text
+            var command = result.replace(/^alexa\s*/, ""); // Removes "Alexa" and any extra spaces
+
+            if (command === "confirm") {
+                document.getElementById("formSubmit").click(); // Click the submit button
+            } else {
+                inputField.focus();
+                inputField.value = command; // Fill input field without "Alexa"
+            }
+
+            // Auto-submit if the user stays silent for 3 seconds
+            if (inactivityTimer) clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                console.log('1 seconds of inactivity, submitting the form.');
+                document.getElementById("formSubmit").click();
+            }, 1000);
+        }
+    };
+
+    recognition.onerror = function(event) {
+        console.error('Speech recognition error:', event.error);
+    };
+
+    recognition.onend = function() {
+        recognition.start(); // Restart recognition when it ends
+    };
+
+    // Start listening
+    recognition.start();
+
+    // Cancel speech synthesis on page unload
+    window.addEventListener('beforeunload', () => {
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+    });
+</script>
+

@@ -40,11 +40,13 @@ urlpatterns = [
     path('reminders/mark_completed/<int:reminder_id>/', views.MarkAsCompletedView.as_view(), name='mark_as_completed'),
     path('pregnancytips',views.PregnancyTipsView.as_view(),name='pregnancytip'),
     # path('baby-kick-tracking/',views.BabyKickTrackingView.as_view(), name='baby_kick_tracking'),
-     path('diet-plans/', views.DietPlanListView.as_view(), name='diet_plans'),
-     path('exercise-yoga/',views.ExerciseYogaListView.as_view(), name='exercise_yoga_list'),
-
-     path('aboutus',views.AboutusView.as_view(),name='aboutus'),
-     path('logout/',views.LogOutView.as_view(),name='logout')
+    path('diet-plans/', views.DietPlanListView.as_view(), name='diet_plans'),
+    path('exercise-yoga/',views.ExerciseYogaListView.as_view(), name='exercise_yoga_list'),
+    path('chatbot/',views.ChatbotView.as_view(),name='bot'),
+    path('aboutus',views.AboutusView.as_view(),name='aboutus'),
+    path('logout/',views.LogOutView.as_view(),name='logout'),
+    #  path('chatbothome/',views.chatbot_page, name='chatbot-home'),
+    #  path('chatbot/',views.chatbot_response, name='chatbot-response'),
 
 
 
